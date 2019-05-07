@@ -21,7 +21,11 @@ Unser Ziel ist es, eine funktionale App zu erstellen, die mit wenigen Features d
 Geplante Oberflächen:
 
 Log In
+
 Registrierung
+
 Startbildschirm mit kompakter Übersicht
+
 Datenübersicht in Kontenform
+
 Visualisierung der Daten in Form von Graphen 
