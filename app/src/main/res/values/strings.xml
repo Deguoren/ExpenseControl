@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">expense_mgmt</string>
+    <string name="starting_page">Menu</string>
+    <string name="string_welcome">Herzlich Willkommen!</string>
+    <string name="string_typeUserName">Bitte wähle einen Benutzernamen:</string>
+    <string name="string_user">Benutzer</string>
+    <string name="string_typePw">Bitte wähle ein Passwort:</string>
+    <string name="string_pw">Passwort</string>
+    <string name="string_retypePw">Passwort bestätigen:</string>
+    <string name="string_letsgo">Auf gehts!</string>
+    <string name="string_login">Log In</string>
+    <string name="string_reg">Registrieren</string>
+    <string name="errorMessage">Bitte fülle alle Felder aus!</string>
+    <string name="wrongLogIn">Benutzername oder Passwort falsch!</string>
+    <string name="errorMessageSecPw">Die Passwörter stimmen nicht überein!</string>
+    <string name="title_activity_registrate">Registrierung</string>
+    <string name="bar_start">Start</string>
+    <string name="bar_graph">Grafik</string>
+    <string name="bar_ledger">Konto</string>
+    <string name="title_home">Hallo, User!</string>
+    <string name="greetings">Hallo !</string>
+    <string name="deineDaten">Deine Daten im Überblick</string>
+    <string name="eingabe_plus">+</string>
+    <string name="eingabe_minus">-</string>
+    <string name="Blutzucker">Dein Blutzuckerwert</string>
+    <string name="title_activity_starting_page">Ausgabentracker</string>
+    <string name="balance_str">Kontostand:</string>
+    <string name="balance_value">Standard-Testeintrag €</string>
+    <string name="latest_transactions">Deine letzten Ausgaben im Überblick:</string>
+    <string name="enterValue">Bitte gib einen Betrag ein: </string>
+    <string name="enterCategory">Wähle eine Kategorie:</string>
+</resources>

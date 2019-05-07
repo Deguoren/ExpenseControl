@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="feeling">
+        <item>Lebensmittel</item>
+        <item>Haushaltskosten</item>
+        <item>Shopping</item>
+        <item>Unternehmungen</item>
+        <item>Sonstiges</item>
+    </string-array>
+</resources>
