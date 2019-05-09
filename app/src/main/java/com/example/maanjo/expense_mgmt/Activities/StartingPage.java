@@ -63,7 +63,7 @@ public class StartingPage extends AppCompatActivity{
         button_plus = (Button) findViewById(R.id.button_plus);
         button_minus = (Button) findViewById(R.id.button_minus);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation2);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
@@ -183,21 +183,21 @@ public class StartingPage extends AppCompatActivity{
             switch (item.getItemId()) {
                 case R.id.navigation_start:
 
-                    table_intent.setClassName("com.example.maanjo.sqlite_diabetesapp", "com.example.maanjo.sqlite_diabetesapp.Activities.StartingPage");
+                    table_intent.setClassName("com.example.maanjo.expense_mgmt", "com.example.maanjo.expense_mgmt.Activities.StartingPage");
                     table_intent.putExtras(bundle);
                     startActivity(table_intent);
                     return true;
 
                 case R.id.navigation_table:
 
-                    table_intent.setClassName("com.example.maanjo.sqlite_diabetesapp", "com.example.maanjo.sqlite_diabetesapp.Activities.TableViewer");
+                    table_intent.setClassName("com.example.maanjo.expense_mgmt", "com.example.maanjo.expense_mgmt.Activities.TableViewer");
                     table_intent.putExtras(bundle);
                     startActivity(table_intent);
                     return true;
 
                 case R.id.navigation_graph:
 
-                    table_intent.setClassName("com.example.maanjo.sqlite_diabetesapp", "com.example.maanjo.sqlite_diabetesapp.Activities.GraphViewer");
+                    table_intent.setClassName("com.example.maanjo.expense_mgmt", "com.example.maanjo.expense_mgmt.Activities.GraphViewer");
                     table_intent.putExtras(bundle);
                     startActivity(table_intent);
                     return true;

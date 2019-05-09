@@ -29,4 +29,5 @@
     <string name="latest_transactions">Deine letzten Ausgaben im Überblick:</string>
     <string name="enterValue">Bitte gib einen Betrag ein: </string>
     <string name="enterCategory">Wähle eine Kategorie:</string>
+    <string name="title_activity_tableView">Deine Übersicht</string>
 </resources>

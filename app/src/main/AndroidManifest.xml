@@ -27,6 +27,11 @@
             android:name=".Activities.StartingPage"
             android:label="@string/title_activity_starting_page" >
         </activity>
+        <activity
+            android:name=".Activities.TableViewer"
+            android:label="@string/title_activity_tableView"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
     </application>
 
