@@ -72,9 +72,9 @@ public class TableHelper {
         ExpenseReader b;
         expenseArr = new String[3][3];
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i <= 3; i++) {
 
-            b = expenseValues.get(i);
+            b = expenseValues.get(3-i);
 
             Long date_milSec = b.getDate();
             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");
