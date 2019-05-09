@@ -22,9 +22,14 @@ import android.widget.TextView;
 
 import com.example.maanjo.expense_mgmt.Database.Data_source;
 import com.example.maanjo.expense_mgmt.Database.Data_source;
+import com.example.maanjo.expense_mgmt.Database.TableHelper;
 import com.example.maanjo.expense_mgmt.R;
 
 import java.util.Date;
+
+import de.codecrafters.tableview.model.TableColumnDpWidthModel;
+import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
+import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 /**
  * StartingPage verwaltet die Funktionalitäten der Oberfläche activity_starting_page
@@ -39,6 +44,8 @@ public class StartingPage extends AppCompatActivity{
     public Button button_minus;
     public int userId;
     private String m_Text = "";
+    public de.codecrafters.tableview.TableView<String[]> tv;
+    public TableHelper tableHelper;
 
     /**
      * OnCreate-Methode der Klasse Registrate
@@ -63,7 +70,17 @@ public class StartingPage extends AppCompatActivity{
         button_plus = (Button) findViewById(R.id.button_plus);
         button_minus = (Button) findViewById(R.id.button_minus);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation2);
+        tableHelper = new TableHelper(this);
+        tv = findViewById(R.id.tableView2);
+        tv.setColumnCount(3);
+        TableColumnDpWidthModel columnModel = new TableColumnDpWidthModel(this, 3, 130);
+        columnModel.setColumnWidth(1, 80);
+        columnModel.setColumnWidth(2, 170);
+        tv.setColumnModel(columnModel);
+        tv.setHeaderAdapter(new SimpleTableHeaderAdapter(this,tableHelper.getTableHeader()));
+        tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpensePreview(1)));
+
+        BottomNavigationView navigation = findViewById(R.id.navigation3);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 

@@ -23,7 +23,7 @@ public class TableHelper {
      *
      * @param c: Anwendungskontext
      */
-    public TableHelper(Context c){
+    public TableHelper(Context c) {
 
         this.c = c;
     }
@@ -33,7 +33,7 @@ public class TableHelper {
      *
      * @return Spaltenüberschriften
      */
-    public String[] getTableHeader(){
+    public String[] getTableHeader() {
 
         return tableHeader;
     }
@@ -44,23 +44,49 @@ public class TableHelper {
      * @param userId: NutzerID
      * @return 2-Dimensionales Array mit allen Tupeln der Tabelle Metrics
      */
-    public String[][] getExpenseValue(int userId){
+    public String[][] getExpenseValue(int userId) {
 
         ArrayList<ExpenseReader> expenseValues = new Data_source(c).getAllExpenses(userId);
         ExpenseReader b;
         expenseArr = new String[expenseValues.size()][3];
 
-        for(int i = 0; i < expenseValues.size(); i++){
+        for (int i = 0; i < expenseValues.size(); i++) {
 
             b = expenseValues.get(i);
 
             Long date_milSec = b.getDate();
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");
             Date resultdate = new Date(date_milSec);
 
             expenseArr[i][0] = sdf.format(resultdate);
             expenseArr[i][1] = Integer.toString(b.getExpense());
             expenseArr[i][2] = b.getCategory();
+
+        }
+        return expenseArr;
+    }
+
+    public String[][] getExpensePreview(int userId) {
+
+        ArrayList<ExpenseReader> expenseValues = new Data_source(c).getAllExpenses(userId);
+        ExpenseReader b;
+        expenseArr = new String[3][3];
+
+        for (int i = 0; i < 3; i++) {
+
+            b = expenseValues.get(i);
+
+            Long date_milSec = b.getDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");
+            Date resultdate = new Date(date_milSec);
+
+            expenseArr[i][0] = sdf.format(resultdate);
+            expenseArr[i][1] = Integer.toString(b.getExpense());
+            expenseArr[i][2] = b.getCategory();
+
+            if(i == 2){
+                break;
+            }
 
         }
         return expenseArr;

@@ -37,7 +37,7 @@
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view2"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
@@ -60,6 +60,16 @@
                 android:text="@string/latest_transactions"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
+                <de.codecrafters.tableview.TableView xmlns:table="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/tableView2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@color/material_blue_grey_800"
+                    android:dividerHeight="1dp"
+                    app:layout_constraintTop_toBottomOf="@id/last_exp"/>
+
 
 
 
@@ -125,7 +135,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation2"
+        android:id="@+id/navigation3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
