@@ -25,7 +25,10 @@ import com.example.maanjo.expense_mgmt.Database.Data_source;
 import com.example.maanjo.expense_mgmt.Database.TableHelper;
 import com.example.maanjo.expense_mgmt.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
@@ -83,7 +86,7 @@ public class StartingPage extends AppCompatActivity{
         BottomNavigationView navigation = findViewById(R.id.navigation3);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-
+        monthlyBudget();
 
         button_plus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +178,46 @@ public class StartingPage extends AppCompatActivity{
 
     }
 
+    public void monthlyBudget(){
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        String datum = dateFormat.format(date);
+
+        if(Pattern.matches("^(\\d{4})[/](\\d{2})[/](01)$", datum)){
+
+            LayoutInflater layoutInflater = LayoutInflater.from(StartingPage.this);
+            View promptView = layoutInflater.inflate(R.layout.budget_dialog, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(StartingPage.this);
+
+            final EditText budget_value = (EditText) promptView.findViewById(R.id.budget_value);
+
+            alertDialogBuilder.setView(promptView);
+            alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+
+                    userId = dataSource.getUserId(getIntent().getStringExtra("userString"));
+                    int budget = Integer.parseInt(budget_value.getText().toString());
+                    dataSource.createBudget(budget, userId);
+
+                }
+            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
+
+        }
+
+    }
+
 
 
     //Hinzufügen eines Listeners zu dem BottomNavigationView (Menü)
@@ -222,4 +265,5 @@ public class StartingPage extends AppCompatActivity{
             return false;
         }
     };
+
 }

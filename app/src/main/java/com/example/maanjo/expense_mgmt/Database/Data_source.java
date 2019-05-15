@@ -114,6 +114,25 @@ public class Data_source {
 
     }
 
+    /**Hinzufügen oder Aktualisieren eines Budgets in der User-Tabelle
+     * @param budget: Budget des Users, welches monatlich aktualisiert wird
+     */
+
+    public void createBudget(int budget, int userId){
+
+        long date = System.currentTimeMillis();
+
+        ContentValues budgetEntry = new ContentValues();
+        budgetEntry.put(DbHelper.COLUMN_budget, budget);
+        budgetEntry.put(DbHelper.COLUMN_budget_date, date);
+        budgetEntry.put(DbHelper.COLUMN_User_ID, userId);
+
+        database.insert(DbHelper.table_budget, null, budgetEntry);
+
+        Log.d(LOG_TAG, "Budget in Höhe von " + budget + " am Datum " + date
+               + " wurde angelegt");
+    }
+
     /**
      * Festlegen eines Budgets in der Budget-Tabelle
      * @param budget: Individuelles Budget
