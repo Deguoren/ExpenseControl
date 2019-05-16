@@ -12,7 +12,7 @@
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view1"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         android:layout_marginTop="12dp"
         card_view:cardBackgroundColor="#ffffff"
@@ -22,16 +22,28 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/card_view3">
 
-        <TextView
-            android:id="@+id/greetings"
-            android:layout_width="wrap_content"
-            android:layout_height="33dp"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:text="@string/greetings"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            tools:text="Wie geht's dir heute?" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
 
+            <TextView
+                android:id="@+id/greetings"
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:text="@string/greetings"
+                android:textSize="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+            <lecho.lib.hellocharts.view.PieChartView
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toBottomOf="@id/greetings"/>
+
+
+        </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -98,13 +110,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/balance_str" />
-
-            <TextView
-                android:id="@+id/balance_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/balance_value"
-                card_view:layout_constraintLeft_toRightOf="@id/balance_text" />
 
             <Button
                 android:id="@+id/button_plus"

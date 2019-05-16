@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
+import lecho.lib.hellocharts.view.PieChartView;
 
 /**
  * StartingPage verwaltet die Funktionalitäten der Oberfläche activity_starting_page
@@ -41,6 +42,8 @@ public class StartingPage extends AppCompatActivity{
 
     public static final String LOG_TAG = LogIn.class.getSimpleName();
     private TextView mTextMessage;
+    private TextView balance_text;
+    private TextView expenses;
     private Data_source dataSource;
     public String userName;
     public Button button_plus;
@@ -67,11 +70,17 @@ public class StartingPage extends AppCompatActivity{
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
 
         mTextMessage = findViewById(R.id.greetings);
+        balance_text = (TextView) findViewById(R.id.balance_text);
+        PieChartView pieChartView = (PieChartView) findViewById(R.id.chart);
+        button_plus = (Button) findViewById(R.id.button_plus);
+        button_minus = (Button) findViewById(R.id.button_minus);
+
         userName = String.valueOf(getIntent().getStringExtra("userString"));
         mTextMessage.setText(new StringBuilder().append("Hey, ").append(userName).toString());
         userName = getIntent().getStringExtra("userString");
-        button_plus = (Button) findViewById(R.id.button_plus);
-        button_minus = (Button) findViewById(R.id.button_minus);
+
+        balance_text.setText(new StringBuilder().append("Dein Kontostand: " + dataSource.getAccountBalance(userName)));
+        pieChartView.setPieChartData(dataSource.startingPieChart(userName));
 
         tableHelper = new TableHelper(this);
         tv = findViewById(R.id.tableView2);

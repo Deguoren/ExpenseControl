@@ -2,9 +2,12 @@ package com.example.maanjo.expense_mgmt.Database;
 
 
 import android.content.Context;
+import android.support.v4.content.res.TypedArrayUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -49,6 +52,7 @@ public class TableHelper {
         ArrayList<ExpenseReader> expenseValues = new Data_source(c).getAllExpenses(userId);
         ExpenseReader b;
         expenseArr = new String[expenseValues.size()][3];
+        Collections.reverse(expenseValues);
 
         for (int i = 0; i < expenseValues.size(); i++) {
 
@@ -71,10 +75,11 @@ public class TableHelper {
         ArrayList<ExpenseReader> expenseValues = new Data_source(c).getAllExpenses(userId);
         ExpenseReader b;
         expenseArr = new String[3][3];
+        Collections.reverse(expenseValues);
 
         for (int i = 0; i <= 3; i++) {
 
-            b = expenseValues.get(3-i);
+            b = expenseValues.get(i);
 
             Long date_milSec = b.getDate();
             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");

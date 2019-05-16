@@ -4,9 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.view.PieChartView;
 
 /**
  * Beinhaltet alle Methoden, die direkt auf die Datenbank zugreifen (Werte eintragen & Auslesen)
@@ -263,6 +269,31 @@ public class Data_source {
         return expenseList;
     }
 
+    public int getAccountBalance(String userName){
+
+        database = dbHelper.getWritableDatabase();
+        int sum = 0;
+        String[] columns = {DbHelper.COLUMN_spending};
+
+        String where = DbHelper.COLUMN_User_ID + " = " + getUserId(userName);
+        Cursor c = database.query(DbHelper.table_expenses,
+                columns, where, null, null, null, null);
+
+        c.moveToFirst();
+
+        if(c.moveToFirst()) {
+
+            do {
+                sum += c.getInt(c.getColumnIndex("spending"));
+
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        Log.d(LOG_TAG, "Der Kontostand beträgt: " + sum);
+        return sum;
+    }
+
     /**
      * Ermittelt die UserID, die zu dem übergebenen UserName gehört
      *
@@ -287,6 +318,68 @@ public class Data_source {
                 Log.d(LOG_TAG, "UserId: " + cursor.getInt(0));
                 userId = cursor.getInt(0);
                 return userId;
+            }
+        }
+        return cursor.getInt(0);
+    }
+
+    public PieChartData startingPieChart(String userName){
+
+        List<SliceValue> data = new ArrayList<>();
+        ArrayList<ExpenseReader> rawData = getAllExpenses(getUserId(userName));
+        ExpenseReader eR;
+        float plus = 0;
+        float minus = 0;
+        float sum = 0;
+        int x = 0;
+
+        for(int i = 0; i < rawData.size(); i++){
+
+            eR = rawData.get(i);
+            x = eR.getExpense();
+
+            if(x <= 0){
+
+                minus += x;
+            }
+            else if(x > 0){
+
+                plus += x;
+            }
+        }
+        sum = getBudget(userName) + plus;
+
+        float minusPr = minus/sum;
+        float plusPr = (sum+plus-minus)/sum;
+
+       data.add(new SliceValue(minus*(-1), Color.RED));
+       data.add(new SliceValue(sum+minus, Color.GREEN));
+
+        PieChartData pie = new PieChartData(data);
+        pie.setHasLabels(true).setValueLabelTextSize(14);
+        pie.setHasCenterCircle(true).setCenterText1("Saldo").setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#0097A7"));
+        Log.d(LOG_TAG, "minus-%: " + minusPr +"minus: " + minus +"sum: " +sum);
+        return pie;
+    }
+
+    public int getBudget(String userName){
+
+        String[] columns = {DbHelper.COLUMN_budget};
+        String where = DbHelper.COLUMN_User_ID +" = " + getUserId(userName);
+        int budget;
+
+        Cursor cursor = database.query(DbHelper.table_budget,
+                columns, where, null, null,null, null);
+
+        cursor.moveToFirst();
+
+        if (cursor != null && cursor.moveToFirst()) {
+
+            if (cursor.getCount() > 0) {
+
+                Log.d(LOG_TAG, "UserId: " + cursor.getInt(0));
+                budget = cursor.getInt(cursor.getColumnIndex("budget"));
+                return budget;
             }
         }
         return cursor.getInt(0);
