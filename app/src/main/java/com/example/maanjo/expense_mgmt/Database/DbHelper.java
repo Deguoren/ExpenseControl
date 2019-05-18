@@ -21,7 +21,6 @@ public class DbHelper extends SQLiteOpenHelper{
 
     public static final String table_user = "userTable";
     public static final String table_expenses = "expenses";
-    public static final String table_budget = "budget";
 
     public static final String COLUMN_User_ID = "id";
     public static final String COLUMN_User_Name = "userName";
@@ -31,8 +30,6 @@ public class DbHelper extends SQLiteOpenHelper{
     public static final String COLUMN_category = "category";
     public static final String COLUMN_expensesDate = "date";
 
-    public static final String COLUMN_budget = "budget";
-    public static final String COLUMN_budget_date = "date";
 
     /**
      * Deklarieren und Initialisieren der SQL-Statements zum Erzeugen der Tabellen.
@@ -45,18 +42,12 @@ public class DbHelper extends SQLiteOpenHelper{
 
     public static final String sql_createExpenses_table = "CREATE TABLE "
             + table_expenses + "("
-            + COLUMN_spending + " INTEGER NOT NULL, "
+            + COLUMN_spending + " FLOAT NOT NULL, "
             + COLUMN_category + " TEXT NOT NULL, "
             + COLUMN_expensesDate + " LONG NOT NULL, "
             + COLUMN_User_ID + " INTEGER, "
             + " FOREIGN KEY ("+COLUMN_User_ID+") REFERENCES "+ table_user +"("+COLUMN_User_ID+"));";
 
-    public static final String sql_createBudget_table = "CREATE TABLE "
-            + table_budget + "("
-            + COLUMN_budget + " INTEGER NOT NULL, "
-            + COLUMN_budget_date + " LONG NOT NULL, "
-            + COLUMN_User_ID + " INTEGER, "
-            + " FOREIGN KEY ("+COLUMN_User_ID+") REFERENCES "+ table_user +"("+COLUMN_User_ID+"));";
 
     public DbHelper(Context context){
 
@@ -77,9 +68,6 @@ public class DbHelper extends SQLiteOpenHelper{
 
             Log.d(LOG_TAG, "Die Tabelle  table_expenses wird mit SQL-Befehl: " + sql_createExpenses_table + " angelegt.");
             db.execSQL(sql_createExpenses_table);
-
-            Log.d(LOG_TAG, "Die Tabelle  table_budget wird mit SQL-Befehl: " + sql_createBudget_table + " angelegt.");
-            db.execSQL(sql_createBudget_table);
         }
         catch (Exception ex) {
             Log.e(LOG_TAG, "Fehler beim Anlegen der Tabelle: " + ex.getMessage());

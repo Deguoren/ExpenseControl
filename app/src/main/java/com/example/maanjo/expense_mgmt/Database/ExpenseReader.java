@@ -6,7 +6,7 @@ public class ExpenseReader {
      * Objektklasse zum Zwischenspeichern der ausgelesenen Datenbanktupel der Tabelle Expenses.
      */
 
-    private int expense;
+    private float expense;
     private long date;
     private String category;
     private int user_id;
@@ -21,7 +21,7 @@ public class ExpenseReader {
      * @param user_id: UserId
      */
 
-    public ExpenseReader(int expense, long date, String category, int user_id){
+    public ExpenseReader(float expense, long date, String category, int user_id){
 
         this.expense = expense;
         this.date = date;
@@ -33,11 +33,11 @@ public class ExpenseReader {
      * Getter- & Setter-Methoden der Instanzvariablen, um auf diese zuzugreifen.
      */
 
-    public int getExpense() {
+    public float getExpense() {
         return expense;
     }
 
-    public void setExpense(int expense) {
+    public void setExpense(float expense) {
         this.expense = expense;
     }
 

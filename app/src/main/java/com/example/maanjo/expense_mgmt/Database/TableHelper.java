@@ -63,7 +63,7 @@ public class TableHelper {
             Date resultdate = new Date(date_milSec);
 
             expenseArr[i][0] = sdf.format(resultdate);
-            expenseArr[i][1] = Integer.toString(b.getExpense());
+            expenseArr[i][1] = Float.toString(b.getExpense());
             expenseArr[i][2] = b.getCategory();
 
         }
@@ -77,22 +77,42 @@ public class TableHelper {
         expenseArr = new String[3][3];
         Collections.reverse(expenseValues);
 
-        for (int i = 0; i <= 3; i++) {
+        if(!expenseValues.isEmpty()) {
 
-            b = expenseValues.get(i);
+            for (int i = 0; i <= 3; i++) {
 
-            Long date_milSec = b.getDate();
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");
-            Date resultdate = new Date(date_milSec);
+                b = expenseValues.get(i);
 
-            expenseArr[i][0] = sdf.format(resultdate);
-            expenseArr[i][1] = Integer.toString(b.getExpense());
-            expenseArr[i][2] = b.getCategory();
+                Long date_milSec = b.getDate();
+                SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");
+                Date resultdate = new Date(date_milSec);
 
-            if(i == 2){
-                break;
+                expenseArr[i][0] = sdf.format(resultdate);
+                expenseArr[i][1] = Float.toString(b.getExpense());
+                expenseArr[i][2] = b.getCategory();
+
+                if (i == 2) {
+                    break;
+                }
+
+                if(expenseValues.size() == 1){
+
+                    expenseArr[1][0] = "";
+                    expenseArr[1][1] = "";
+                    expenseArr[1][2] = "";
+                    expenseArr[2][0] = "";
+                    expenseArr[2][1] = "";
+                    expenseArr[2][2] = "";
+                    break;
+                }
+                if(expenseValues.size() == 2){
+
+                    expenseArr[2][0] = "";
+                    expenseArr[2][1] = "";
+                    expenseArr[2][2] = "";
+                    break;
+                }
             }
-
         }
         return expenseArr;
     }

@@ -79,7 +79,7 @@ public class Data_source {
      * @param category: Kategorie der Ausgabe
      * @param userId: automatisch vergebene UserID
      */
-    public void createExpense(int spending, String category, int userId){
+    public void createExpense(float spending, String category, int userId){
 
         ContentValues expenseEntry = new ContentValues();
         long date = System.currentTimeMillis();
@@ -102,7 +102,7 @@ public class Data_source {
      * @param userId: automatisch vergebene UserID
      */
 
-    public void createIncome(int income, String category, int userId){
+    public void createIncome(float income, String category, int userId){
 
         ContentValues expenseEntry = new ContentValues();
         long date = System.currentTimeMillis();
@@ -117,45 +117,6 @@ public class Data_source {
         Log.d(LOG_TAG, "Einnahme in Höhe von " + income + " der Kategorie " + category
                 + " am " + date + " wurde angelegt");
 
-
-    }
-
-    /**Hinzufügen oder Aktualisieren eines Budgets in der User-Tabelle
-     * @param budget: Budget des Users, welches monatlich aktualisiert wird
-     */
-
-    public void createBudget(int budget, int userId){
-
-        long date = System.currentTimeMillis();
-
-        ContentValues budgetEntry = new ContentValues();
-        budgetEntry.put(DbHelper.COLUMN_budget, budget);
-        budgetEntry.put(DbHelper.COLUMN_budget_date, date);
-        budgetEntry.put(DbHelper.COLUMN_User_ID, userId);
-
-        database.insert(DbHelper.table_budget, null, budgetEntry);
-
-        Log.d(LOG_TAG, "Budget in Höhe von " + budget + " am Datum " + date
-               + " wurde angelegt");
-    }
-
-    /**
-     * Festlegen eines Budgets in der Budget-Tabelle
-     * @param budget: Individuelles Budget
-     * @param date: Monat und Jahr des Budget
-     * @param userId: automatisch vergebene UserID
-     */
-    public void createBudget(int budget, long date, int userId){
-
-        ContentValues budgetEntry = new ContentValues();
-
-        budgetEntry.put(DbHelper.COLUMN_budget, budget);
-        budgetEntry.put(DbHelper.COLUMN_budget_date, date);
-        budgetEntry.put(DbHelper.COLUMN_User_ID, userId);
-
-        database.insert(DbHelper.table_budget, null, budgetEntry);
-
-        Log.d(LOG_TAG, "Für den Monat " + date + " wurde das Budget " + budget + " angelegt.");
 
     }
 
@@ -222,7 +183,7 @@ public class Data_source {
         int idDate = cursor.getColumnIndex(DbHelper.COLUMN_expensesDate);
         int idUserId = cursor.getColumnIndex(DbHelper.COLUMN_User_ID);
 
-        int spending = cursor.getInt(idSpending);
+        float spending = cursor.getFloat(idSpending);
         String category = cursor.getString(idCategory);
         long date = cursor.getLong(idDate);
         int userId = cursor.getInt(idUserId);
@@ -269,10 +230,10 @@ public class Data_source {
         return expenseList;
     }
 
-    public int getAccountBalance(String userName){
+    public float getAccountBalance(String userName){
 
         database = dbHelper.getWritableDatabase();
-        int sum = 0;
+        float sum = 0;
         String[] columns = {DbHelper.COLUMN_spending};
 
         String where = DbHelper.COLUMN_User_ID + " = " + getUserId(userName);
@@ -284,7 +245,7 @@ public class Data_source {
         if(c.moveToFirst()) {
 
             do {
-                sum += c.getInt(c.getColumnIndex("spending"));
+                sum += c.getFloat(c.getColumnIndex("spending"));
 
             } while (c.moveToNext());
         }
@@ -330,8 +291,7 @@ public class Data_source {
         ExpenseReader eR;
         float plus = 0;
         float minus = 0;
-        float sum = 0;
-        int x = 0;
+        float x = 0;
 
         for(int i = 0; i < rawData.size(); i++){
 
@@ -347,42 +307,15 @@ public class Data_source {
                 plus += x;
             }
         }
-        sum = getBudget(userName) + plus;
-
-        float minusPr = minus/sum;
-        float plusPr = (sum+plus-minus)/sum;
 
        data.add(new SliceValue(minus*(-1), Color.RED));
-       data.add(new SliceValue(sum+minus, Color.GREEN));
+       data.add(new SliceValue(plus, Color.GREEN));
 
         PieChartData pie = new PieChartData(data);
-        pie.setHasLabels(true).setValueLabelTextSize(14);
-        pie.setHasCenterCircle(true).setCenterText1("Saldo").setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#0097A7"));
-        Log.d(LOG_TAG, "minus-%: " + minusPr +"minus: " + minus +"sum: " +sum);
+        pie.setHasCenterCircle(true).setCenterText1("Total "+String.valueOf(plus+minus)).setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#0097A7"));
+        Log.d(LOG_TAG, "minus: " + minus +"plus: " +plus);
         return pie;
     }
 
-    public int getBudget(String userName){
-
-        String[] columns = {DbHelper.COLUMN_budget};
-        String where = DbHelper.COLUMN_User_ID +" = " + getUserId(userName);
-        int budget;
-
-        Cursor cursor = database.query(DbHelper.table_budget,
-                columns, where, null, null,null, null);
-
-        cursor.moveToFirst();
-
-        if (cursor != null && cursor.moveToFirst()) {
-
-            if (cursor.getCount() > 0) {
-
-                Log.d(LOG_TAG, "UserId: " + cursor.getInt(0));
-                budget = cursor.getInt(cursor.getColumnIndex("budget"));
-                return budget;
-            }
-        }
-        return cursor.getInt(0);
-    }
 
 }

@@ -3,6 +3,7 @@ package com.example.maanjo.expense_mgmt.Activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -95,8 +96,6 @@ public class StartingPage extends AppCompatActivity{
         BottomNavigationView navigation = findViewById(R.id.navigation3);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        monthlyBudget();
-
         button_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +123,7 @@ public class StartingPage extends AppCompatActivity{
         mTextMessage = findViewById(R.id.greetings);
         userName = String.valueOf(getIntent().getStringExtra("userString"));
         mTextMessage.setText(new StringBuilder().append("Hey, ").append(userName).toString());
+        balance_text.setText(new StringBuilder().append("Dein Kontostand: " + dataSource.getAccountBalance(userName)));
         Log.d(LOG_TAG, "Die Datenquelle wird geöffnet.");
         dataSource.open();
     }
@@ -159,12 +159,13 @@ public class StartingPage extends AppCompatActivity{
            public void onClick(DialogInterface dialog, int id) {
 
                userId = dataSource.getUserId(getIntent().getStringExtra("userString"));
-               int exp_inc = Integer.parseInt(exp_inc_value.getText().toString());
+               float exp_inc = Float.parseFloat(exp_inc_value.getText().toString());
                String category = category_spinner.getSelectedItem().toString();
 
                if(operation == "+"){
 
                    dataSource.createIncome(exp_inc, category, userId);
+
                }
                else if(operation == "-"){
 
@@ -184,51 +185,18 @@ public class StartingPage extends AppCompatActivity{
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
 
+        tableHelper = new TableHelper(this);
+        tv = findViewById(R.id.tableView2);
+        tv.setColumnCount(3);
+        TableColumnDpWidthModel columnModel = new TableColumnDpWidthModel(this, 3, 130);
+        columnModel.setColumnWidth(1, 80);
+        columnModel.setColumnWidth(2, 170);
+        tv.setColumnModel(columnModel);
+        tv.setHeaderAdapter(new SimpleTableHeaderAdapter(this,tableHelper.getTableHeader()));
+        tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpensePreview(1)));
+
 
     }
-
-    public void monthlyBudget(){
-
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Date date = new Date();
-        String datum = dateFormat.format(date);
-
-        if(Pattern.matches("^(\\d{4})[/](\\d{2})[/](01)$", datum)){
-
-            LayoutInflater layoutInflater = LayoutInflater.from(StartingPage.this);
-            View promptView = layoutInflater.inflate(R.layout.budget_dialog, null);
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(StartingPage.this);
-
-            final EditText budget_value = (EditText) promptView.findViewById(R.id.budget_value);
-
-            alertDialogBuilder.setView(promptView);
-            alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-
-                    userId = dataSource.getUserId(getIntent().getStringExtra("userString"));
-                    int budget = Integer.parseInt(budget_value.getText().toString());
-                    dataSource.createBudget(budget, userId);
-
-                }
-            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                    dialog.cancel();
-                }
-            });
-
-            AlertDialog alert = alertDialogBuilder.create();
-            alert.show();
-
-        }
-
-    }
-
-
-
     //Hinzufügen eines Listeners zu dem BottomNavigationView (Menü)
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
