@@ -1,17 +1,12 @@
 package com.example.maanjo.expense_mgmt.Activities;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -22,14 +17,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.maanjo.expense_mgmt.Database.Data_source;
-import com.example.maanjo.expense_mgmt.Database.Data_source;
 import com.example.maanjo.expense_mgmt.Database.TableHelper;
 import com.example.maanjo.expense_mgmt.R;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.regex.Pattern;
 
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
@@ -53,6 +42,7 @@ public class StartingPage extends AppCompatActivity{
     private String m_Text = "";
     public de.codecrafters.tableview.TableView<String[]> tv;
     public TableHelper tableHelper;
+    PieChartView pieChartView;
 
     /**
      * OnCreate-Methode der Klasse Registrate
@@ -70,15 +60,16 @@ public class StartingPage extends AppCompatActivity{
         dataSource = new Data_source(this);
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
 
+        userName = getIntent().getStringExtra("userString");
+        Log.d(LOG_TAG,"BISCH DU HIER ANGEKOMMEN: " + userName);
+
         mTextMessage = findViewById(R.id.greetings);
         balance_text = (TextView) findViewById(R.id.balance_text);
-        PieChartView pieChartView = (PieChartView) findViewById(R.id.chart);
+        pieChartView = (PieChartView) findViewById(R.id.chart);
         button_plus = (Button) findViewById(R.id.button_plus);
         button_minus = (Button) findViewById(R.id.button_minus);
 
-        userName = String.valueOf(getIntent().getStringExtra("userString"));
         mTextMessage.setText(new StringBuilder().append("Hey, ").append(userName).toString());
-        userName = getIntent().getStringExtra("userString");
 
         balance_text.setText(new StringBuilder().append("Dein Kontostand: " + dataSource.getAccountBalance(userName)));
         pieChartView.setPieChartData(dataSource.startingPieChart(userName));
@@ -93,14 +84,14 @@ public class StartingPage extends AppCompatActivity{
         tv.setHeaderAdapter(new SimpleTableHeaderAdapter(this,tableHelper.getTableHeader()));
         tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpensePreview(1)));
 
-        BottomNavigationView navigation = findViewById(R.id.navigation3);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         button_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                activateEnterButton("+");
+                activateIncomeButton();
             }
         });
 
@@ -108,7 +99,7 @@ public class StartingPage extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                activateEnterButton("-");
+                activateExpenseButton();
             }
         });
 
@@ -120,12 +111,15 @@ public class StartingPage extends AppCompatActivity{
     protected void onResume() {
 
         super.onResume();
+        dataSource.open();
         mTextMessage = findViewById(R.id.greetings);
         userName = String.valueOf(getIntent().getStringExtra("userString"));
         mTextMessage.setText(new StringBuilder().append("Hey, ").append(userName).toString());
         balance_text.setText(new StringBuilder().append("Dein Kontostand: " + dataSource.getAccountBalance(userName)));
+        tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpensePreview(1)));
+        pieChartView.setPieChartData(dataSource.startingPieChart(userName));
+
         Log.d(LOG_TAG, "Die Datenquelle wird geöffnet.");
-        dataSource.open();
     }
 
     /**
@@ -139,14 +133,14 @@ public class StartingPage extends AppCompatActivity{
     }
 
     /**
-     * Funktionalitäten, die ausgeführt werden, wenn der Enter-Button gedrückt wird
+     * Funktionalitäten, die ausgeführt werden, wenn der Minus-Button gedrückt wird --> Ausgabe wird angelegt
      * Hinzufügen eines OnClick-Listeners
-     * Erzeugen eines Eintrages in der Tabelle Metric durch aufrufen der Methode createBloodValue()
+     * Erzeugen eines Eintrages in der Tabelle Expenses durch aufrufen der Methode createBloodValue()
      */
-    private void activateEnterButton(final String operation){
+    private void activateExpenseButton(){
 
        LayoutInflater layoutInflater = LayoutInflater.from(StartingPage.this);
-       View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
+       View promptView = layoutInflater.inflate(R.layout.expense_dialog, null);
        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(StartingPage.this);
 
        final EditText exp_inc_value = (EditText) promptView.findViewById(R.id.exp_inc_value);
@@ -159,20 +153,12 @@ public class StartingPage extends AppCompatActivity{
            public void onClick(DialogInterface dialog, int id) {
 
                userId = dataSource.getUserId(getIntent().getStringExtra("userString"));
-               float exp_inc = Float.parseFloat(exp_inc_value.getText().toString());
+               float exp = Float.parseFloat(exp_inc_value.getText().toString());
                String category = category_spinner.getSelectedItem().toString();
 
-               if(operation == "+"){
-
-                   dataSource.createIncome(exp_inc, category, userId);
-
-               }
-               else if(operation == "-"){
-
-                   dataSource.createExpense(exp_inc, category, userId);
-
-               }
-
+               dataSource.createExpense(exp, category, userId);
+               recreate();
+               overridePendingTransition(0, 0);
            }
        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
            @Override
@@ -184,19 +170,48 @@ public class StartingPage extends AppCompatActivity{
 
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
-
-        tableHelper = new TableHelper(this);
-        tv = findViewById(R.id.tableView2);
-        tv.setColumnCount(3);
-        TableColumnDpWidthModel columnModel = new TableColumnDpWidthModel(this, 3, 130);
-        columnModel.setColumnWidth(1, 80);
-        columnModel.setColumnWidth(2, 170);
-        tv.setColumnModel(columnModel);
-        tv.setHeaderAdapter(new SimpleTableHeaderAdapter(this,tableHelper.getTableHeader()));
-        tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpensePreview(1)));
-
-
     }
+
+    /**
+     * Funktionalitäten, die ausgeführt werden, wenn der Plus-Button gedrückt wird --> Einnahme wird angelegt
+     * Hinzufügen eines OnClick-Listeners
+     * Erzeugen eines Eintrages in der Tabelle Expenses durch aufrufen der Methode createIncome()
+     */
+    private void activateIncomeButton(){
+
+        LayoutInflater layoutInflater = LayoutInflater.from(StartingPage.this);
+        View promptView = layoutInflater.inflate(R.layout.income_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(StartingPage.this);
+
+        final EditText income_value = (EditText) promptView.findViewById(R.id.income_value);
+
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+
+                userId = dataSource.getUserId(getIntent().getStringExtra("userString"));
+                float inc = Float.parseFloat(income_value.getText().toString());
+                String category = "Einnahme";
+
+                dataSource.createIncome(inc, category, userId);
+                recreate();
+                overridePendingTransition(0, 0);
+
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
     //Hinzufügen eines Listeners zu dem BottomNavigationView (Menü)
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -214,15 +229,14 @@ public class StartingPage extends AppCompatActivity{
             userId = dataSource.getUserId(getIntent().getStringExtra("userString"));
             Bundle bundle = new Bundle();
             bundle.putInt("userId", userId);
-            bundle.putString("userName", String.valueOf(userName));
+            bundle.putString("userName", userName);
             Intent table_intent = new Intent();
 
             switch (item.getItemId()) {
                 case R.id.navigation_start:
 
-                    table_intent.setClassName("com.example.maanjo.expense_mgmt", "com.example.maanjo.expense_mgmt.Activities.StartingPage");
-                    table_intent.putExtras(bundle);
-                    startActivity(table_intent);
+                    recreate();
+                    overridePendingTransition(0, 0);
                     return true;
 
                 case R.id.navigation_table:

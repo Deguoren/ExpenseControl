@@ -30,6 +30,7 @@
     <string name="enterValue">Bitte gib einen Betrag ein: </string>
     <string name="enterCategory">Wähle eine Kategorie:</string>
     <string name="title_activity_tableView">Deine Übersicht</string>
-    <string name="enterBudget">Bitte gib dein monatliches Budget ein</string>
+    <string name="enterIncome">Bitte gib deine Einnahme ein:</string>
     <string name="title_activity_graph">Deine Übersicht</string>
+    <string name="overview">Deine Übersicht</string>
 </resources>

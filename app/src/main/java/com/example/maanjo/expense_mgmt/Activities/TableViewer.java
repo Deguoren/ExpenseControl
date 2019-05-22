@@ -47,6 +47,8 @@ public class TableViewer extends AppCompatActivity {
         userId = bundle.getInt("userId", 0);
         userName = bundle.getString("userName");
 
+        Log.d(LOG_TAG, "userNammeeeeeeeeeeeeeeeeeeeee: " + userName);
+
         tableHelper = new TableHelper(this);
         tv = findViewById(R.id.tableView);
         tv.setColumnCount(3);
@@ -65,6 +67,10 @@ public class TableViewer extends AppCompatActivity {
         super.onResume();
         Log.d(LOG_TAG, "Die Datenquelle wird geöffnet.");
         dataSource.open();
+        Bundle bundle = getIntent().getExtras();
+        userId = bundle.getInt("userId", 0);
+        userName = bundle.getString("userName");
+        tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpenseValue(userId)));
 
     }
 
@@ -97,24 +103,26 @@ public class TableViewer extends AppCompatActivity {
             bundle.putString("userName", String.valueOf(userName));
             Intent table_intent = new Intent();
 
+
             switch (item.getItemId()) {
-                case R.id.navigation_start:
+                case R.id.navigation_start2:
 
-                    startActivity(new Intent(TableViewer.this, StartingPage.class).putExtra("userString", userName));
+                    //startActivity(new Intent(TableViewer.this, StartingPage.class).putExtra("userString", userName));
+                    finish();
                     return true;
 
-                case R.id.navigation_table:
+                case R.id.navigation_table2:
 
-                    table_intent.setClassName("com.example.maanjo.sqlite_diabetesapp", "com.example.maanjo.sqlite_diabetesapp.Activities.TableViewer");
-                    table_intent.putExtras(bundle);
-                    startActivity(table_intent);
+                    recreate();
+                    overridePendingTransition(0, 0);
                     return true;
 
-                case R.id.navigation_graph:
+                case R.id.navigation_graph2:
 
-                    table_intent.setClassName("com.example.maanjo.sqlite_diabetesapp", "com.example.maanjo.sqlite_diabetesapp.Activities.GraphViewer");
+                    table_intent.setClassName("com.example.maanjo.expense_mgmt", "com.example.maanjo.expense_mgmt.Activities.GraphViewer");
                     table_intent.putExtras(bundle);
                     startActivity(table_intent);
+                    finish();
                     return true;
             }
             return false;

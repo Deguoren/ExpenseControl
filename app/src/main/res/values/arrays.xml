@@ -5,6 +5,7 @@
         <item>Haushaltskosten</item>
         <item>Shopping</item>
         <item>Unternehmungen</item>
+        <item>Einnahme</item>
         <item>Sonstiges</item>
     </string-array>
 </resources>

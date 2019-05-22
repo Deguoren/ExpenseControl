@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.example.maanjo.expense_mgmt.Activities.StartingPage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,7 +118,6 @@ public class Data_source {
 
         Log.d(LOG_TAG, "Einnahme in Höhe von " + income + " der Kategorie " + category
                 + " am " + date + " wurde angelegt");
-
 
     }
 
@@ -252,8 +253,9 @@ public class Data_source {
         c.close();
 
         Log.d(LOG_TAG, "Der Kontostand beträgt: " + sum);
-        return sum;
+        return Math.round((sum*100.00)/100.00);
     }
+
 
     /**
      * Ermittelt die UserID, die zu dem übergebenen UserName gehört
@@ -272,15 +274,18 @@ public class Data_source {
 
         cursor.moveToFirst();
 
+        Log.d(LOG_TAG, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "+ userName);
         if (cursor != null && cursor.moveToFirst()) {
 
             if (cursor.getCount() > 0) {
 
-                Log.d(LOG_TAG, "UserId: " + cursor.getInt(0));
-                userId = cursor.getInt(0);
+                Log.d(LOG_TAG, "UserId: " + cursor.getInt(cursor.getColumnIndex("id")));
+                userId = cursor.getInt(cursor.getColumnIndex("id"));
+                cursor.close();
                 return userId;
             }
         }
+        cursor.close();
         return cursor.getInt(0);
     }
 
@@ -312,8 +317,58 @@ public class Data_source {
        data.add(new SliceValue(plus, Color.GREEN));
 
         PieChartData pie = new PieChartData(data);
-        pie.setHasCenterCircle(true).setCenterText1("Total "+String.valueOf(plus+minus)).setCenterText1FontSize(20).setCenterText1Color(Color.parseColor("#0097A7"));
+        pie.setHasCenterCircle(true).setCenterText1("Total "+String.valueOf(Math.round((plus+minus)*100.00)/100.00)).setCenterText1FontSize(15).setCenterText1Color(Color.parseColor("#0097A7"));
         Log.d(LOG_TAG, "minus: " + minus +"plus: " +plus);
+        return pie;
+    }
+
+    public PieChartData detailledPieChart(int userId){
+
+        List<SliceValue> data = new ArrayList<>();
+        ArrayList<ExpenseReader> rawData = getAllExpenses(userId);
+        ExpenseReader eR;
+        float x = 0;
+        String y = "";
+
+        float lebensmittel = 0;
+        float haushaltskosten = 0;
+        float shopping = 0;
+        float unternehmungen = 0;
+        float einnahme = 0;
+        float sonstiges = 0;
+
+        for(int i = 0; i < rawData.size(); i++){
+
+            eR = rawData.get(i);
+            x = eR.getExpense();
+            y = eR.getCategory();
+
+            switch(y){
+
+                case("Lebensmittel"):
+                    lebensmittel += x;
+                case("Haushaltskosten"):
+                    haushaltskosten += x;
+                case("Shopping"):
+                    shopping += x;
+                case("Unternehmungen"):
+                    unternehmungen += x;
+                case("Einnahme"):
+                    einnahme += x;
+                case("Sonstiges"):
+                    sonstiges += x;
+            }
+        }
+
+        data.add(new SliceValue(lebensmittel*(-1), Color.BLUE).setLabel("Lebensmittel"));
+        data.add(new SliceValue(haushaltskosten*(-1), Color.YELLOW).setLabel("Haushaltskosten"));
+        data.add(new SliceValue(shopping*(-1), Color.RED).setLabel("Shopping"));
+        data.add(new SliceValue(unternehmungen*(-1), Color.BLACK).setLabel("Unternehmungen"));
+        data.add(new SliceValue(sonstiges*(-1), Color.GRAY).setLabel("Sonstiges"));
+        data.add(new SliceValue(einnahme, Color.GREEN).setLabel("Einnahme"));
+
+        PieChartData pie = new PieChartData(data);
+        pie.setHasLabels(true);
         return pie;
     }
 

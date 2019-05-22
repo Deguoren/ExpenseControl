@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.LogIn"
+            android:name=".Activities.LogIn" android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,20 +20,21 @@
         </activity>
         <activity
             android:name=".Activities.Registrate"
+            android:exported="true"
             android:label="@string/title_activity_registrate"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Activities.StartingPage"
+            android:name=".Activities.StartingPage" android:exported="true"
             android:label="@string/title_activity_starting_page" >
         </activity>
         <activity
-            android:name=".Activities.TableViewer"
+            android:name=".Activities.TableViewer" android:exported="true"
             android:label="@string/title_activity_tableView"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Activities.GraphViewer"
+            android:name=".Activities.GraphViewer" android:exported="true"
             android:label="@string/title_activity_graph"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

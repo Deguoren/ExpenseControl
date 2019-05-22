@@ -99,6 +99,7 @@ public class LogIn extends AppCompatActivity{
 
 
                     startActivity(new Intent(LogIn.this, StartingPage.class).putExtra("userString", userString));
+                    finish();
                 }
                 else{
                     editTextName.setError(getString(R.string.wrongLogIn));
