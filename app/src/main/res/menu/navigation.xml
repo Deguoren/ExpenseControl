@@ -10,14 +10,14 @@
 
     <item
         android:id="@+id/navigation_table"
-        android:icon="@drawable/graph"
+        android:icon="@drawable/table"
         android:title="@string/bar_ledger"
         android:state_checked="true"
         android:color="@color/colorPrimaryDark"/>
 
     <item
         android:id="@+id/navigation_graph"
-        android:icon="@drawable/table"
+        android:icon="@drawable/graph"
         android:title="@string/bar_graph"
         android:state_checked="true"
         android:color="@color/colorPrimaryDark"/>

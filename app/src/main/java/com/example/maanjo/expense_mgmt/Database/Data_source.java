@@ -253,7 +253,7 @@ public class Data_source {
         c.close();
 
         Log.d(LOG_TAG, "Der Kontostand beträgt: " + sum);
-        return Math.round((sum*100.00)/100.00);
+        return sum;
     }
 
 
@@ -321,56 +321,5 @@ public class Data_source {
         Log.d(LOG_TAG, "minus: " + minus +"plus: " +plus);
         return pie;
     }
-
-    public PieChartData detailledPieChart(int userId){
-
-        List<SliceValue> data = new ArrayList<>();
-        ArrayList<ExpenseReader> rawData = getAllExpenses(userId);
-        ExpenseReader eR;
-        float x = 0;
-        String y = "";
-
-        float lebensmittel = 0;
-        float haushaltskosten = 0;
-        float shopping = 0;
-        float unternehmungen = 0;
-        float einnahme = 0;
-        float sonstiges = 0;
-
-        for(int i = 0; i < rawData.size(); i++){
-
-            eR = rawData.get(i);
-            x = eR.getExpense();
-            y = eR.getCategory();
-
-            switch(y){
-
-                case("Lebensmittel"):
-                    lebensmittel += x;
-                case("Haushaltskosten"):
-                    haushaltskosten += x;
-                case("Shopping"):
-                    shopping += x;
-                case("Unternehmungen"):
-                    unternehmungen += x;
-                case("Einnahme"):
-                    einnahme += x;
-                case("Sonstiges"):
-                    sonstiges += x;
-            }
-        }
-
-        data.add(new SliceValue(lebensmittel*(-1), Color.BLUE).setLabel("Lebensmittel"));
-        data.add(new SliceValue(haushaltskosten*(-1), Color.YELLOW).setLabel("Haushaltskosten"));
-        data.add(new SliceValue(shopping*(-1), Color.RED).setLabel("Shopping"));
-        data.add(new SliceValue(unternehmungen*(-1), Color.BLACK).setLabel("Unternehmungen"));
-        data.add(new SliceValue(sonstiges*(-1), Color.GRAY).setLabel("Sonstiges"));
-        data.add(new SliceValue(einnahme, Color.GREEN).setLabel("Einnahme"));
-
-        PieChartData pie = new PieChartData(data);
-        pie.setHasLabels(true);
-        return pie;
-    }
-
 
 }
