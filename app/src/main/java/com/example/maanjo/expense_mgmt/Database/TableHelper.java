@@ -3,12 +3,15 @@ package com.example.maanjo.expense_mgmt.Database;
 
 import android.content.Context;
 import android.support.v4.content.res.TypedArrayUtils;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+
+import static com.example.maanjo.expense_mgmt.Activities.GraphViewer.LOG_TAG;
 
 /**
  * Hilfsklasse zur Erstellung einer Tabelle für die Activity TableViewer
@@ -79,7 +82,7 @@ public class TableHelper {
 
         if(!expenseValues.isEmpty()) {
 
-            for (int i = 0; i <= 3; i++) {
+            for (int i = 0; i < expenseValues.size() && i < 3; i++) {
 
                 b = expenseValues.get(i);
 
@@ -90,28 +93,6 @@ public class TableHelper {
                 expenseArr[i][0] = sdf.format(resultdate);
                 expenseArr[i][1] = Float.toString(b.getExpense());
                 expenseArr[i][2] = b.getCategory();
-
-                if (i == 2) {
-                    break;
-                }
-
-                if(expenseValues.size() == 1){
-
-                    expenseArr[1][0] = "";
-                    expenseArr[1][1] = "";
-                    expenseArr[1][2] = "";
-                    expenseArr[2][0] = "";
-                    expenseArr[2][1] = "";
-                    expenseArr[2][2] = "";
-                    break;
-                }
-                if(expenseValues.size() == 2){
-
-                    expenseArr[2][0] = "";
-                    expenseArr[2][1] = "";
-                    expenseArr[2][2] = "";
-                    break;
-                }
             }
         }
         return expenseArr;

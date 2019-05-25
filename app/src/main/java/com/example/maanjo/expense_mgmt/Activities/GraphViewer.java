@@ -13,6 +13,23 @@ import com.example.maanjo.expense_mgmt.Database.Data_source;
 import com.example.maanjo.expense_mgmt.Database.ExpenseReader;
 import com.example.maanjo.expense_mgmt.Database.TableHelper;
 import com.example.maanjo.expense_mgmt.R;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,13 +37,17 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import lecho.lib.hellocharts.formatter.AxisValueFormatter;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Column;
+import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 import lecho.lib.hellocharts.view.PieChartView;
@@ -50,19 +71,24 @@ public class GraphViewer extends AppCompatActivity{
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
 
         Bundle bundle = getIntent().getExtras();
-        userId = bundle.getInt("userId", 0);
+        userId = bundle.getInt("userId");
         userName = bundle.getString("userName");
         //userName = getIntent().getStringExtra("userString");
 
-        PieChartView pieChartView = (PieChartView) findViewById(R.id.detailledPieChart);
-        pieChartView.setPieChartData(detailledPieChart(userId));
+        PieChart pie = (PieChart) findViewById(R.id.detailledPieChart);
+        pie.setData(detailledPieChart(userId));
+        pie.setDrawHoleEnabled(false);
+        pie.setDescription("");
+        pie.setDrawSliceText(false);
 
-        LineChartView lineChartView = findViewById(R.id.lineChartView);
-        lineChartView.setLineChartData(detailledLineChart(userId));
-        Viewport viewport = new Viewport(lineChartView.getMaximumViewport());
-        viewport.top =110;
-        lineChartView.setMaximumViewport(viewport);
-        lineChartView.setCurrentViewport(viewport);
+        LineChart line = findViewById(R.id.lineChartView);
+        line.setData(detailledLineChart(userId));
+
+        BarChart bar = findViewById(R.id.barchart);
+        bar.setData(detailledBarChart(userId));
+        bar.setDescription("");
+        YAxis yAxis = bar.getAxisLeft();
+        yAxis.setAxisMinValue(0);
 
         BottomNavigationView navigation = findViewById(R.id.navigation3);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -86,81 +112,94 @@ public class GraphViewer extends AppCompatActivity{
         dataSource.close();
     }
 
-    public LineChartData detailledLineChart(int userId){
+    public LineData detailledLineChart(int userId){
 
-        String[] axisData = {"Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept",
-                "Oct", "Nov", "Dec"};
-        int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
+        ArrayList<ExpenseReader> rawData = dataSource.getAllExpenses(userId);
+        ExpenseReader eR;
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");
 
-        List yAxisValues = new ArrayList();
-        List axisValues = new ArrayList();
+        ArrayList<String> xValues = new ArrayList<String>();
 
-        Line line = new Line(yAxisValues).setColor(Color.parseColor("#9C27B0"));
+        ArrayList<Entry> yValues = new ArrayList<Entry>();
 
-        for(int i = 0; i < axisData.length; i++){
-            axisValues.add(i, new AxisValue(i).setLabel(axisData[i]));
+        for (int i = 0; i < rawData.size(); i++) {
+
+            eR = rawData.get(i);
+
+            if(!eR.getCategory().equals("Einnahme")) {
+
+                yValues.add(new Entry(eR.getExpense()*-1, i));
+                xValues.add(sdf.format(new Date(eR.getDate())));
+            }
+
         }
 
-        for (int i = 0; i < yAxisData.length; i++){
-            yAxisValues.add(new PointValue(i, yAxisData[i]));
-        }
-
-        List lines = new ArrayList();
-        lines.add(line);
-
-
-        LineChartData data = new LineChartData();
-        data.setLines(lines);
-
-        Axis axis = new Axis();
-        axis.setValues(axisValues).setHasTiltedLabels(true);
-        data.setAxisXBottom(axis);
-        axis.setTextSize(16);
-        axis.setTextColor(Color.parseColor("#03A9F4"));
-
-        Axis yAxis = new Axis();
-        data.setAxisYLeft(yAxis);
-        yAxis.setTextColor(Color.parseColor("#03A9F4"));
-        yAxis.setTextSize(16);
-        yAxis.setName("Sales in millions");
-
-
-
+        LineDataSet set = new LineDataSet(yValues, "Ausgaben");
+        LineData data = new LineData(xValues, set);
         return data;
-
-       /* ArrayList<ExpenseReader> expenseValues = new Data_source(this).getAllExpenses(userId);
-        ExpenseReader b;
-
-        for (int i = 0; i < expenseValues.size(); i++) {
-
-            b = expenseValues.get(i);
-
-            Long date_milSec = b.getDate();
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
-            Date resultdate = new Date(date_milSec);
-
-            xAxis.add(sdf.format(resultdate));
-            yAxis.add(b.getExpense());
-
-        }
-
-        Line line = new Line(yAxis);
-
-        for(int i = 0; i < yAxis.size(); i++){
-            xAxis.add(i, new AxisValue(i).setLabel((xAxis[i])));
-        }
-
-        for(int i = 0; i < xAxis.size(); i++){
-
-            yAxis.add(i, new AxisValue(i).setLabel(Float.toString(yAxis[i])));
-        }*/
-
-
     }
 
-    public PieChartData detailledPieChart(int userId){
+    public BarData detailledBarChart(int userId) {
 
-        List<SliceValue> data = new ArrayList<>();
+        ArrayList amount = new ArrayList();
+        ArrayList<String> labels = new ArrayList<String>();
+
+        labels.add("Einnahmen");
+        labels.add("Ausgaben");
+
+        ArrayList<ExpenseReader> rawData = dataSource.getAllExpenses(userId);
+        ExpenseReader eR;
+        float x = 0;
+        String y;
+
+        float ausgabe = 0;
+        float einnahme = 0;
+
+        for (int i = 0; i < rawData.size(); i++) {
+
+            eR = rawData.get(i);
+            x = eR.getExpense();
+            y = eR.getCategory();
+
+            if(x < 0){
+
+                x = x*-1;
+            }
+
+            switch (y) {
+
+                case("Lebensmittel"):
+                    ausgabe += x;
+                    break;
+                case("Haushaltskosten"):
+                    ausgabe += x;
+                    break;
+                case("Shopping"):
+                    ausgabe += x;
+                    break;
+                case("Unternehmungen"):
+                    ausgabe += x;
+                    break;
+                case("Einnahme"):
+                    einnahme += x;
+                    break;
+                case("Sonstiges"):
+                    ausgabe += x;
+                    break;
+            }
+        }
+        amount.add(new BarEntry(einnahme, 0));
+        amount.add(new BarEntry(ausgabe, 1));
+
+        BarDataSet set = new BarDataSet(amount, "Betrag in Euro");
+        set.setColors(ColorTemplate.COLORFUL_COLORS);
+        BarData data = new BarData(labels, set);
+
+        return data;
+    }
+
+    public PieData detailledPieChart(int userId){
+
         ArrayList<ExpenseReader> rawData = dataSource.getAllExpenses(userId);
         ExpenseReader eR;
         float x = 0;
@@ -183,31 +222,57 @@ public class GraphViewer extends AppCompatActivity{
 
                 case("Lebensmittel"):
                     lebensmittel += x;
+                    break;
                 case("Haushaltskosten"):
                     haushaltskosten += x;
+                    break;
                 case("Shopping"):
                     shopping += x;
+                    break;
                 case("Unternehmungen"):
                     unternehmungen += x;
+                    break;
                 case("Einnahme"):
                     einnahme += x;
+                    break;
                 case("Sonstiges"):
                     sonstiges += x;
+                    break;
             }
         }
 
-        data.add(new SliceValue(lebensmittel*(-1), Color.BLUE).setLabel("Lebensmittel" + "\n" + lebensmittel + "€"));
-        data.add(new SliceValue(haushaltskosten*(-1), Color.YELLOW).setLabel("Haushaltskosten"+ "\n" + haushaltskosten + "€"));
-        data.add(new SliceValue(shopping*(-1), Color.RED).setLabel("Shopping"+ "\n" + shopping + "€"));
-        data.add(new SliceValue(unternehmungen*(-1), Color.BLACK).setLabel("Unternehmungen"+ "\n" + unternehmungen + "€"));
-        data.add(new SliceValue(sonstiges*(-1), Color.GRAY).setLabel("Sonstiges"+ "\n" + sonstiges + "€"));
-        data.add(new SliceValue(einnahme, Color.GREEN).setLabel("Einnahme"+ "\n" + einnahme + "€"));
+        ArrayList<Entry> yValue = new ArrayList<Entry>();
+        ArrayList<String> xValue = new ArrayList<String>();
 
-        PieChartData pie = new PieChartData(data);
-        pie.setHasLabels(true);
-        pie.setHasCenterCircle(true);
+        if(lebensmittel*(-1) > 0){
+            yValue.add(new Entry(lebensmittel*(-1), 0));
+            xValue.add("Lebensmittel");
+        }
+        if(haushaltskosten*(-1) > 0){
+            yValue.add(new Entry(haushaltskosten*(-1), 1));
+            xValue.add("Haushaltskosten");
+        }
+        if(shopping*(-1) > 0){
+            yValue.add(new Entry(shopping*(-1), 2));
+            xValue.add("Shopping");
+        }
+        if(unternehmungen*(-1) > 0){
+            yValue.add(new Entry(unternehmungen*(-1), 3));
+            xValue.add("Unternehmungen");
+        }
+        if(sonstiges*(-1) > 0){
+            yValue.add(new Entry(sonstiges*(-1), 4));
+            xValue.add("Sonstiges");
+        }
 
-        return pie;
+        PieDataSet set = new PieDataSet(yValue, "");
+        set.setColors(ColorTemplate.VORDIPLOM_COLORS);
+
+        PieData data = new PieData(xValue, set);
+        data.setValueFormatter(new PercentFormatter());
+        data.setValueTextSize(13f);
+
+        return data;
     }
 
     //Hinzufügen eines Listeners zu dem BottomNavigationView (Menü)

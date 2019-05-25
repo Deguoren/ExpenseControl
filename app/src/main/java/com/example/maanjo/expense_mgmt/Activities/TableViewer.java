@@ -44,10 +44,8 @@ public class TableViewer extends AppCompatActivity {
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
 
         Bundle bundle = getIntent().getExtras();
-        userId = bundle.getInt("userId", 0);
+        userId = bundle.getInt("userId");
         userName = bundle.getString("userName");
-
-        Log.d(LOG_TAG, "userNammeeeeeeeeeeeeeeeeeeeee: " + userName);
 
         tableHelper = new TableHelper(this);
         tv = findViewById(R.id.tableView);

@@ -61,7 +61,7 @@ public class StartingPage extends AppCompatActivity{
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
 
         userName = getIntent().getStringExtra("userString");
-        Log.d(LOG_TAG,"BISCH DU HIER ANGEKOMMEN: " + userName);
+        userId = dataSource.getUserId(userName);
 
         mTextMessage = findViewById(R.id.greetings);
         balance_text = (TextView) findViewById(R.id.balance_text);
@@ -74,6 +74,9 @@ public class StartingPage extends AppCompatActivity{
         balance_text.setText(new StringBuilder().append("Dein Kontostand: " + dataSource.getAccountBalance(userName)));
         pieChartView.setPieChartData(dataSource.startingPieChart(userName));
 
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         tableHelper = new TableHelper(this);
         tv = findViewById(R.id.tableView2);
         tv.setColumnCount(3);
@@ -82,10 +85,7 @@ public class StartingPage extends AppCompatActivity{
         columnModel.setColumnWidth(2, 170);
         tv.setColumnModel(columnModel);
         tv.setHeaderAdapter(new SimpleTableHeaderAdapter(this,tableHelper.getTableHeader()));
-        tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpensePreview(1)));
-
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpensePreview(userId)));
 
         button_plus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +103,7 @@ public class StartingPage extends AppCompatActivity{
             }
         });
 
+
     }
 
     /**
@@ -114,9 +115,10 @@ public class StartingPage extends AppCompatActivity{
         dataSource.open();
         mTextMessage = findViewById(R.id.greetings);
         userName = String.valueOf(getIntent().getStringExtra("userString"));
+        userId = dataSource.getUserId(userName);
         mTextMessage.setText(new StringBuilder().append("Hey, ").append(userName).toString());
         balance_text.setText(new StringBuilder().append("Dein Kontostand: " + dataSource.getAccountBalance(userName)));
-        tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpensePreview(1)));
+        tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpensePreview(userId)));
         pieChartView.setPieChartData(dataSource.startingPieChart(userName));
 
         Log.d(LOG_TAG, "Die Datenquelle wird geöffnet.");

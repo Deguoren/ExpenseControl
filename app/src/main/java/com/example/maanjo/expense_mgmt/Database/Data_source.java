@@ -265,16 +265,19 @@ public class Data_source {
      */
     public int getUserId(String userName){
 
-        String[] columns = {DbHelper.COLUMN_User_ID};
-        String where = DbHelper.COLUMN_User_Name +" LIKE '%"+userName+"%'";
+        database = dbHelper.getWritableDatabase();
+        String[] columns = {DbHelper.COLUMN_User_ID, DbHelper.COLUMN_User_Name};
+        String where = DbHelper.COLUMN_User_Name +" = ?";
+        String[] whereArgs = {userName};
         int userId;
+        Log.d(LOG_TAG, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "+ userName);
 
         Cursor cursor = database.query(DbHelper.table_user,
-                columns, where, null, null,null, null);
+                columns, where, whereArgs, null,null, null);
 
         cursor.moveToFirst();
 
-        Log.d(LOG_TAG, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "+ userName);
+
         if (cursor != null && cursor.moveToFirst()) {
 
             if (cursor.getCount() > 0) {
