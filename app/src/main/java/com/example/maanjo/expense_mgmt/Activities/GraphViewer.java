@@ -33,6 +33,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -83,6 +84,7 @@ public class GraphViewer extends AppCompatActivity{
 
         LineChart line = findViewById(R.id.lineChartView);
         line.setData(detailledLineChart(userId));
+        line.setDescription("");
 
         BarChart bar = findViewById(R.id.barchart);
         bar.setData(detailledBarChart(userId));
@@ -116,11 +118,13 @@ public class GraphViewer extends AppCompatActivity{
 
         ArrayList<ExpenseReader> rawData = dataSource.getAllExpenses(userId);
         ExpenseReader eR;
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
 
         ArrayList<String> xValues = new ArrayList<String>();
-
         ArrayList<Entry> yValues = new ArrayList<Entry>();
+
+        ArrayList<String> aggrDate = new ArrayList<String>();
+        ArrayList<Float> aggrExp = new ArrayList<Float>();
 
         for (int i = 0; i < rawData.size(); i++) {
 
@@ -128,13 +132,49 @@ public class GraphViewer extends AppCompatActivity{
 
             if(!eR.getCategory().equals("Einnahme")) {
 
-                yValues.add(new Entry(eR.getExpense()*-1, i));
-                xValues.add(sdf.format(new Date(eR.getDate())));
+                if(aggrDate.contains(sdf.format(new Date(eR.getDate())))){
+
+                    int pos = aggrDate.indexOf(sdf.format(new Date(eR.getDate())));
+                    float x = aggrExp.get(pos);
+                    aggrExp.set(pos, x += eR.getExpense()*(-1));
+                }
+                else{
+                    aggrDate.add(sdf.format(new Date(eR.getDate())));
+                    aggrExp.add(eR.getExpense()*(-1));
+                }
             }
 
         }
 
-        LineDataSet set = new LineDataSet(yValues, "Ausgaben");
+        Float exp = 0f;
+
+        for(int i = 0; i < aggrDate.size() && i < aggrExp.size(); i++){
+
+            String date = aggrDate.get(i);
+
+            if(i == 0) {
+                exp = aggrExp.get(i);
+            }
+            else{
+
+                exp += aggrExp.get(i);
+            }
+
+            yValues.add(new Entry(exp, i));
+            xValues.add(date);
+        }
+
+        LineDataSet set = new LineDataSet(yValues, "Ausgaben insgesamt");
+        set.setColor(Color.BLACK);
+        set.setCircleColor(Color.BLACK);
+        set.setLineWidth(1f);
+        set.setCircleRadius(3f);
+        set.setDrawCircleHole(false);
+        set.setValueTextSize(9f);
+        set.setDrawFilled(true);
+        set.setFillAlpha(110);
+        set.setFillColor(Color.RED);
+
         LineData data = new LineData(xValues, set);
         return data;
     }

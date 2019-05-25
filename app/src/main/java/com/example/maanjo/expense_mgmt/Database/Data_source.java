@@ -10,6 +10,8 @@ import android.util.Log;
 import com.example.maanjo.expense_mgmt.Activities.StartingPage;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import lecho.lib.hellocharts.model.PieChartData;
@@ -84,7 +86,17 @@ public class Data_source {
     public void createExpense(float spending, String category, int userId){
 
         ContentValues expenseEntry = new ContentValues();
-        long date = System.currentTimeMillis();
+        //long date = System.currentTimeMillis();
+
+        //Anpassen des Datums zu Testzwecken, um Daten in der Zukunft anlegen zu können
+        Calendar cal = Calendar.getInstance(); //current date and time
+        cal.add(Calendar.DAY_OF_MONTH, 0); //add a day
+        cal.set(Calendar.HOUR_OF_DAY, 23); //set hour to last hour
+        cal.set(Calendar.MINUTE, 59); //set minutes to last minute
+        cal.set(Calendar.SECOND, 59); //set seconds to last second
+        cal.set(Calendar.MILLISECOND, 999); //set milliseconds to last millisecond
+        long date = cal.getTimeInMillis();
+
 
         expenseEntry.put(DbHelper.COLUMN_spending, spending*-1);
         expenseEntry.put(DbHelper.COLUMN_category, category);
