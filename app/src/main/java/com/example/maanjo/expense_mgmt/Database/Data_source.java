@@ -5,18 +5,23 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.example.maanjo.expense_mgmt.Activities.StartingPage;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import lecho.lib.hellocharts.model.PieChartData;
-import lecho.lib.hellocharts.model.SliceValue;
-import lecho.lib.hellocharts.view.PieChartView;
 
 /**
  * Beinhaltet alle Methoden, die direkt auf die Datenbank zugreifen (Werte eintragen & Auslesen)
@@ -28,6 +33,7 @@ public class Data_source {
 
     private SQLiteDatabase  database;
     private DbHelper dbHelper;
+    private Data_source dataSource;
 
     /**
      * Konstruktor
@@ -90,7 +96,7 @@ public class Data_source {
 
         //Anpassen des Datums zu Testzwecken, um Daten in der Zukunft anlegen zu können
         Calendar cal = Calendar.getInstance(); //current date and time
-        cal.add(Calendar.DAY_OF_MONTH, 0); //add a day
+        cal.add(Calendar.DAY_OF_MONTH, 6); //add a day
         cal.set(Calendar.HOUR_OF_DAY, 23); //set hour to last hour
         cal.set(Calendar.MINUTE, 59); //set minutes to last minute
         cal.set(Calendar.SECOND, 59); //set seconds to last second
@@ -218,6 +224,8 @@ public class Data_source {
         database = dbHelper.getWritableDatabase();
         ArrayList<ExpenseReader> expenseList = new ArrayList<>();
 
+        Calendar cal = Calendar.getInstance();
+
         String[] columns = {DbHelper.COLUMN_User_ID, DbHelper.COLUMN_expensesDate,
                 DbHelper.COLUMN_spending, DbHelper.COLUMN_category};
 
@@ -234,7 +242,12 @@ public class Data_source {
             do {
 
                 value = cursorToExpenseReader(cursor);
-                expenseList.add(value);
+                cal.setTimeInMillis(value.getDate());
+
+                if(cal.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH)){
+
+                    expenseList.add(value);
+                }
 
             } while (cursor.moveToNext());
         }
@@ -247,7 +260,8 @@ public class Data_source {
 
         database = dbHelper.getWritableDatabase();
         float sum = 0;
-        String[] columns = {DbHelper.COLUMN_spending};
+        String[] columns = {DbHelper.COLUMN_spending, DbHelper.COLUMN_expensesDate};
+        Calendar cal = Calendar.getInstance();
 
         String where = DbHelper.COLUMN_User_ID + " = " + getUserId(userName);
         Cursor c = database.query(DbHelper.table_expenses,
@@ -258,7 +272,12 @@ public class Data_source {
         if(c.moveToFirst()) {
 
             do {
-                sum += c.getFloat(c.getColumnIndex("spending"));
+                cal.setTimeInMillis(c.getLong(c.getColumnIndex("date")));
+
+                if(cal.get(Calendar.MONTH) == Calendar.getInstance().get(Calendar.MONTH)) {
+
+                    sum += c.getFloat(c.getColumnIndex("spending"));
+                }
 
             } while (c.moveToNext());
         }
@@ -282,7 +301,6 @@ public class Data_source {
         String where = DbHelper.COLUMN_User_Name +" = ?";
         String[] whereArgs = {userName};
         int userId;
-        Log.d(LOG_TAG, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA "+ userName);
 
         Cursor cursor = database.query(DbHelper.table_user,
                 columns, where, whereArgs, null,null, null);
@@ -304,14 +322,14 @@ public class Data_source {
         return cursor.getInt(0);
     }
 
-    public PieChartData startingPieChart(String userName){
+    public PieData startingPieChart(String userName){
 
-        List<SliceValue> data = new ArrayList<>();
         ArrayList<ExpenseReader> rawData = getAllExpenses(getUserId(userName));
         ExpenseReader eR;
-        float plus = 0;
-        float minus = 0;
-        float x = 0;
+        float x = 0f;
+
+        float einnahme = 0f;
+        float ausgabe = 0f;
 
         for(int i = 0; i < rawData.size(); i++){
 
@@ -320,21 +338,39 @@ public class Data_source {
 
             if(x <= 0){
 
-                minus += x;
+                ausgabe += x;
             }
             else if(x > 0){
 
-                plus += x;
+                einnahme += x;
             }
         }
 
-       data.add(new SliceValue(minus*(-1), Color.RED));
-       data.add(new SliceValue(plus, Color.GREEN));
+        ArrayList<Entry> yValue = new ArrayList<Entry>();
+        yValue.add(new Entry(ausgabe*(-1), 0));
+        yValue.add(new Entry(einnahme,1));
 
-        PieChartData pie = new PieChartData(data);
-        pie.setHasCenterCircle(true).setCenterText1("Total "+String.valueOf(Math.round((plus+minus)*100.00)/100.00)).setCenterText1FontSize(15).setCenterText1Color(Color.parseColor("#0097A7"));
-        Log.d(LOG_TAG, "minus: " + minus +"plus: " +plus);
-        return pie;
+        ArrayList<String> xValue = new ArrayList<String>();
+        xValue.add("Ausgabe");
+        xValue.add("Einnahme");
+
+        PieDataSet set = new PieDataSet(yValue, "");
+        set.setColors(new int[]{ Color.rgb(254,142,156), Color.rgb(198,255,140)});
+
+
+        PieData data = new PieData(xValue, set);
+        data.setValueFormatter(new ValueFormatter() {
+                                   @Override
+                                   public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+
+                                       DecimalFormat decFormat;
+                                       decFormat = new DecimalFormat("###,###,##0.00");
+                                       return decFormat.format(value) + " €";
+                                   }
+                               });
+                data.setValueTextSize(13f);
+
+        return data;
     }
 
 }

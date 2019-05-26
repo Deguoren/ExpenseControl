@@ -20,8 +20,8 @@
     <string name="title_home">Hallo, User!</string>
     <string name="greetings">Hallo !</string>
     <string name="deineDaten">Deine Daten im Überblick</string>
-    <string name="eingabe_plus">+</string>
-    <string name="eingabe_minus">-</string>
+    <string name="eingabe_plus">Einnahme</string>
+    <string name="eingabe_minus">Ausgabe</string>
     <string name="Blutzucker">Dein Blutzuckerwert</string>
     <string name="title_activity_starting_page">Ausgabentracker</string>
     <string name="balance_str">Kontostand:</string>
@@ -33,4 +33,7 @@
     <string name="enterIncome">Bitte gib deine Einnahme ein:</string>
     <string name="title_activity_graph">Deine Übersicht</string>
     <string name="overview">Deine Übersicht</string>
+    <string name="barDescription">Deine Einnahmen und Ausgaben im Vergleich</string>
+    <string name="lineDescription">Verlauf deiner Ausgaben</string>
+    <string name="pieDescription">So setzen sich deine Ausgaben zusammen</string>
 </resources>

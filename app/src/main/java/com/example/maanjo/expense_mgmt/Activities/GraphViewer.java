@@ -164,7 +164,7 @@ public class GraphViewer extends AppCompatActivity{
             xValues.add(date);
         }
 
-        LineDataSet set = new LineDataSet(yValues, "Ausgaben insgesamt");
+        LineDataSet set = new LineDataSet(yValues, "Ausgaben insgesamt in €");
         set.setColor(Color.BLACK);
         set.setCircleColor(Color.BLACK);
         set.setLineWidth(1f);

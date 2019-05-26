@@ -19,11 +19,11 @@ import android.widget.TextView;
 import com.example.maanjo.expense_mgmt.Database.Data_source;
 import com.example.maanjo.expense_mgmt.Database.TableHelper;
 import com.example.maanjo.expense_mgmt.R;
+import com.github.mikephil.charting.charts.PieChart;
 
 import de.codecrafters.tableview.model.TableColumnDpWidthModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
-import lecho.lib.hellocharts.view.PieChartView;
 
 /**
  * StartingPage verwaltet die Funktionalitäten der Oberfläche activity_starting_page
@@ -42,7 +42,7 @@ public class StartingPage extends AppCompatActivity{
     private String m_Text = "";
     public de.codecrafters.tableview.TableView<String[]> tv;
     public TableHelper tableHelper;
-    PieChartView pieChartView;
+    PieChart pie;
 
     /**
      * OnCreate-Methode der Klasse Registrate
@@ -65,14 +65,20 @@ public class StartingPage extends AppCompatActivity{
 
         mTextMessage = findViewById(R.id.greetings);
         balance_text = (TextView) findViewById(R.id.balance_text);
-        pieChartView = (PieChartView) findViewById(R.id.chart);
-        button_plus = (Button) findViewById(R.id.button_plus);
-        button_minus = (Button) findViewById(R.id.button_minus);
+        button_plus = (Button) findViewById(R.id.button_einnahme);
+        button_minus = (Button) findViewById(R.id.button_ausgabe);
 
         mTextMessage.setText(new StringBuilder().append("Hey, ").append(userName).toString());
 
-        balance_text.setText(new StringBuilder().append("Dein Kontostand: " + dataSource.getAccountBalance(userName)));
-        pieChartView.setPieChartData(dataSource.startingPieChart(userName));
+        balance_text.setText(new StringBuilder().append("Dein Kontostand: " + dataSource.getAccountBalance(userName) + " €"));
+
+        pie = (PieChart) findViewById(R.id.chart);
+        pie.setData(dataSource.startingPieChart(userName));
+        pie.setDrawHoleEnabled(true);
+        pie.setDescription("");
+        pie.setDrawSliceText(false);
+        pie.setHoleRadius(40f);
+        pie.setTransparentCircleRadius(40f);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -117,9 +123,9 @@ public class StartingPage extends AppCompatActivity{
         userName = String.valueOf(getIntent().getStringExtra("userString"));
         userId = dataSource.getUserId(userName);
         mTextMessage.setText(new StringBuilder().append("Hey, ").append(userName).toString());
-        balance_text.setText(new StringBuilder().append("Dein Kontostand: " + dataSource.getAccountBalance(userName)));
+        balance_text.setText(new StringBuilder().append("Dein Kontostand: " + dataSource.getAccountBalance(userName) + " €"));
         tv.setDataAdapter(new SimpleTableDataAdapter(this, tableHelper.getExpensePreview(userId)));
-        pieChartView.setPieChartData(dataSource.startingPieChart(userName));
+        pie.setData(dataSource.startingPieChart(userName));
 
         Log.d(LOG_TAG, "Die Datenquelle wird geöffnet.");
     }

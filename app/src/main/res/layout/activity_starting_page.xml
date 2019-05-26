@@ -12,7 +12,7 @@
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view1"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="280dp"
         android:layout_gravity="center"
         android:layout_marginTop="12dp"
         card_view:cardBackgroundColor="#ffffff"
@@ -30,18 +30,17 @@
             <TextView
                 android:id="@+id/greetings"
                 android:layout_width="match_parent"
-                android:layout_height="33dp"
+                android:layout_height="30dp"
                 android:text="@string/greetings"
                 android:textSize="20dp"
                 app:layout_constraintTop_toTopOf="parent"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-            <lecho.lib.hellocharts.view.PieChartView
+            <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/chart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@id/greetings"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                android:layout_height="250dp"
+                app:layout_constraintTop_toBottomOf="@id/greetings"/>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -81,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:divider="@color/material_blue_grey_800"
                     android:dividerHeight="1dp"
+                    table:tableView_headerColor="@color/tableHeader"
                     app:layout_constraintTop_toBottomOf="@id/last_exp"/>
 
 
@@ -110,28 +110,32 @@
                 android:id="@+id/balance_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:layout_marginStart="100dp"
                 android:text="@string/balance_str" />
 
             <Button
-                android:id="@+id/button_plus"
-                android:layout_width="wrap_content"
+                android:id="@+id/button_einnahme"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="6dp"
                 android:layout_weight="1"
                 android:text="@string/eingabe_plus"
-                card_view:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                card_view:layout_constraintRight_toRightOf="parent"
                 card_view:layout_constraintTop_toBottomOf="@id/balance_text" />
 
             <Button
-                android:id="@+id/button_minus"
-                android:layout_width="wrap_content"
+                android:id="@+id/button_ausgabe"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
                 android:text="@string/eingabe_minus"
-                card_view:layout_constraintRight_toLeftOf="@id/button_plus"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toLeftOf="@id/button_einnahme"
                 card_view:layout_constraintTop_toBottomOf="@id/balance_text" />
 
 

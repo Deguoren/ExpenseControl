@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:divider="@color/material_blue_grey_800"
-            android:dividerHeight="1dp" />
+            android:dividerHeight="1dp"
+            app:tableView_headerColor="@color/colorPrimary"/>
 
     </ScrollView>
 
