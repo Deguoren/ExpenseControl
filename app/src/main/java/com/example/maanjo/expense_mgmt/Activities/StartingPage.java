@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.maanjo.expense_mgmt.Database.Data_source;
+import com.example.maanjo.expense_mgmt.Database.DataSource;
 import com.example.maanjo.expense_mgmt.Database.TableHelper;
 import com.example.maanjo.expense_mgmt.R;
 import com.github.mikephil.charting.charts.PieChart;
@@ -34,7 +34,7 @@ public class StartingPage extends AppCompatActivity{
     private TextView mTextMessage;
     private TextView balance_text;
     private TextView expenses;
-    private Data_source dataSource;
+    private DataSource dataSource;
     public String userName;
     public Button button_plus;
     public Button button_minus;
@@ -57,7 +57,7 @@ public class StartingPage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starting_page);
 
-        dataSource = new Data_source(this);
+        dataSource = new DataSource(this);
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
 
         userName = getIntent().getStringExtra("userString");

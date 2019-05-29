@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.maanjo.expense_mgmt.Database.Data_source;
+import com.example.maanjo.expense_mgmt.Database.DataSource;
 import com.example.maanjo.expense_mgmt.R;
 
 /**
@@ -18,7 +18,7 @@ import com.example.maanjo.expense_mgmt.R;
 public class LogIn extends AppCompatActivity{
 
     public static final String LOG_TAG = LogIn.class.getSimpleName();
-    private Data_source dataSource;
+    private DataSource dataSource;
     public EditText editTextName;
     public EditText editTextPassword;
 
@@ -34,7 +34,7 @@ public class LogIn extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        dataSource = new Data_source(this);
+        dataSource = new DataSource(this);
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
 
         editTextName = findViewById(R.id.editText_nameLogIn);

@@ -2,16 +2,11 @@ package com.example.maanjo.expense_mgmt.Database;
 
 
 import android.content.Context;
-import android.support.v4.content.res.TypedArrayUtils;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-
-import static com.example.maanjo.expense_mgmt.Activities.GraphViewer.LOG_TAG;
 
 /**
  * Hilfsklasse zur Erstellung einer Tabelle für die Activity TableViewer
@@ -52,7 +47,7 @@ public class TableHelper {
      */
     public String[][] getExpenseValue(int userId) {
 
-        ArrayList<ExpenseReader> expenseValues = new Data_source(c).getAllExpenses(userId);
+        ArrayList<ExpenseReader> expenseValues = new DataSource(c).getAllExpenses(userId);
         ExpenseReader b;
         expenseArr = new String[expenseValues.size()][3];
         Collections.reverse(expenseValues);
@@ -75,7 +70,7 @@ public class TableHelper {
 
     public String[][] getExpensePreview(int userId) {
 
-        ArrayList<ExpenseReader> expenseValues = new Data_source(c).getAllExpenses(userId);
+        ArrayList<ExpenseReader> expenseValues = new DataSource(c).getAllExpenses(userId);
         ExpenseReader b;
         expenseArr = new String[3][3];
         Collections.reverse(expenseValues);

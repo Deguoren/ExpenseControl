@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.maanjo.expense_mgmt.Database.Data_source;
+import com.example.maanjo.expense_mgmt.Database.DataSource;
 import com.example.maanjo.expense_mgmt.Database.TableHelper;
 import com.example.maanjo.expense_mgmt.R;
 
@@ -22,7 +22,7 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 public class TableViewer extends AppCompatActivity {
 
     public static final String LOG_TAG = LogIn.class.getSimpleName();
-    private Data_source dataSource;
+    private DataSource dataSource;
     public de.codecrafters.tableview.TableView<String[]> tv;
     public TableHelper tableHelper;
     public String userName;
@@ -40,7 +40,7 @@ public class TableViewer extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
-        dataSource = new Data_source(this);
+        dataSource = new DataSource(this);
         Log.d(LOG_TAG, "Das Datenquellen-Objekt wird angelegt.");
 
         Bundle bundle = getIntent().getExtras();

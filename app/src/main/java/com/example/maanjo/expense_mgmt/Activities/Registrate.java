@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.maanjo.expense_mgmt.Database.Data_source;
+import com.example.maanjo.expense_mgmt.Database.DataSource;
 import com.example.maanjo.expense_mgmt.R;
 
 /**
@@ -16,7 +16,7 @@ import com.example.maanjo.expense_mgmt.R;
  */
 public class Registrate extends AppCompatActivity{
 
-    private Data_source dataSource;
+    private DataSource dataSource;
     public EditText editTextName;
     public EditText editTextPassword;
     public EditText editTextPassword2;
@@ -32,7 +32,7 @@ public class Registrate extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrate);
 
-        dataSource = new Data_source(this);
+        dataSource = new DataSource(this);
         dataSource.open();
         activateRegButton();
 

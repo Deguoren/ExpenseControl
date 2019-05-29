@@ -5,21 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.example.maanjo.expense_mgmt.Activities.StartingPage;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.formatter.DefaultValueFormatter;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.text.DecimalFormat;
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -27,13 +21,13 @@ import java.util.Calendar;
  * Beinhaltet alle Methoden, die direkt auf die Datenbank zugreifen (Werte eintragen & Auslesen)
  */
 
-public class Data_source {
+public class DataSource {
 
-    private static final String LOG_TAG = Data_source.class.getSimpleName();
+    private static final String LOG_TAG = DataSource.class.getSimpleName();
 
     private SQLiteDatabase  database;
     private DbHelper dbHelper;
-    private Data_source dataSource;
+    private DataSource dataSource;
 
     /**
      * Konstruktor
@@ -41,9 +35,9 @@ public class Data_source {
      *
      * @param context: Anwendungskontext
      */
-    public Data_source(Context context){
+    public DataSource(Context context){
 
-        Log.d(LOG_TAG, "Data_source erzeug jetzt den dbHelper.");
+        Log.d(LOG_TAG, "DataSource erzeug jetzt den dbHelper.");
         dbHelper = new DbHelper(context);
     }
 
@@ -96,7 +90,7 @@ public class Data_source {
 
         //Anpassen des Datums zu Testzwecken, um Daten in der Zukunft anlegen zu können
         Calendar cal = Calendar.getInstance(); //current date and time
-        cal.add(Calendar.DAY_OF_MONTH, 6); //add a day
+        cal.add(Calendar.DAY_OF_MONTH, 0); //add a day
         cal.set(Calendar.HOUR_OF_DAY, 23); //set hour to last hour
         cal.set(Calendar.MINUTE, 59); //set minutes to last minute
         cal.set(Calendar.SECOND, 59); //set seconds to last second

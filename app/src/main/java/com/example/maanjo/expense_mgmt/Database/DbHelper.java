@@ -29,12 +29,9 @@ public class DbHelper extends SQLiteOpenHelper{
     public static final String COLUMN_spending = "spending";
     public static final String COLUMN_category = "category";
     public static final String COLUMN_expensesDate = "date";
-
-
     /**
      * Deklarieren und Initialisieren der SQL-Statements zum Erzeugen der Tabellen.
      */
-
     public static final String sql_createUser_table = "CREATE TABLE " + table_user +
             "(" + COLUMN_User_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_User_Name + " TEXT NOT NULL, " +
@@ -47,7 +44,6 @@ public class DbHelper extends SQLiteOpenHelper{
             + COLUMN_expensesDate + " LONG NOT NULL, "
             + COLUMN_User_ID + " INTEGER, "
             + " FOREIGN KEY ("+COLUMN_User_ID+") REFERENCES "+ table_user +"("+COLUMN_User_ID+"));";
-
 
     public DbHelper(Context context){
 
@@ -73,7 +69,6 @@ public class DbHelper extends SQLiteOpenHelper{
             Log.e(LOG_TAG, "Fehler beim Anlegen der Tabelle: " + ex.getMessage());
         }
     }
-
     /**
      * Methode wird ausgeführt, wenn die Datenbank geupdated wird.
      * Funktion in unserer Applikation nicht eingeführt.
