@@ -9,69 +9,137 @@
     android:orientation="vertical"
     tools:context=".Activities.StartingPage">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view1"
+    <ScrollView
+        android:id="@+id/tableViewScroll"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="12dp"
-        card_view:cardBackgroundColor="#ffffff"
-        card_view:cardCornerRadius="10dp"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/navigation"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/card_view3">
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/greetings"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text="@string/greetings"
-                android:textSize="20dp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/chart"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                app:layout_constraintTop_toBottomOf="@id/greetings"/>
-
-        </android.support.constraint.ConstraintLayout>
-
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view2"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        card_view:cardCornerRadius="10dp"
-        card_view:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintTop_toBottomOf="@id/card_view3">
-
-        <android.support.constraint.ConstraintLayout
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
+            android:layout_height="280dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            card_view:cardBackgroundColor="#ffffff"
+            card_view:cardCornerRadius="10dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/card_view3">
 
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
 
-            <TextView
-                android:id="@+id/last_exp"
+                <TextView
+                    android:id="@+id/greetings"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="@string/greetings"
+                    android:textSize="20dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    app:layout_constraintTop_toBottomOf="@id/greetings"/>
+
+            </android.support.constraint.ConstraintLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/latest_transactions"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="12dp"
+                card_view:cardCornerRadius="10dp"
+                app:layout_constraintTop_toBottomOf="@id/card_view1">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/balance_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="100dp"
+                        android:layout_marginStart="100dp"
+                        android:text="@string/balance_str" />
+
+                    <Button
+                        android:id="@+id/button_einnahme"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_weight="1"
+                        android:text="@string/eingabe_plus"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="30dp"
+                        card_view:layout_constraintRight_toRightOf="parent"
+                        card_view:layout_constraintTop_toBottomOf="@id/balance_text" />
+
+                    <Button
+                        android:id="@+id/button_ausgabe"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:text="@string/eingabe_minus"
+                        card_view:layout_constraintLeft_toLeftOf="parent"
+                        card_view:layout_constraintRight_toLeftOf="@id/button_einnahme"
+                        card_view:layout_constraintTop_toBottomOf="@id/balance_text" />
+
+
+                </android.support.constraint.ConstraintLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            card_view:cardCornerRadius="10dp"
+            card_view:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintTop_toBottomOf="@id/card_view3">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
+
+
+                <TextView
+                    android:id="@+id/last_exp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/latest_transactions"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <de.codecrafters.tableview.TableView xmlns:table="http://schemas.android.com/apk/res-auto"
@@ -83,65 +151,12 @@
                     table:tableView_headerColor="@color/tableHeader"
                     app:layout_constraintTop_toBottomOf="@id/last_exp"/>
 
+            </android.support.constraint.ConstraintLayout>
 
+            </android.support.v7.widget.CardView>
 
-
-        </android.support.constraint.ConstraintLayout>
-
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="12dp"
-        card_view:cardCornerRadius="10dp"
-        app:layout_constraintTop_toBottomOf="@id/card_view1">
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/balance_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="100dp"
-                android:layout_marginStart="100dp"
-                android:text="@string/balance_str" />
-
-            <Button
-                android:id="@+id/button_einnahme"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_weight="1"
-                android:text="@string/eingabe_plus"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@id/balance_text" />
-
-            <Button
-                android:id="@+id/button_ausgabe"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="6dp"
-                android:layout_weight="1"
-                android:text="@string/eingabe_minus"
-                card_view:layout_constraintLeft_toLeftOf="parent"
-                card_view:layout_constraintRight_toLeftOf="@id/button_einnahme"
-                card_view:layout_constraintTop_toBottomOf="@id/balance_text" />
-
-
-        </android.support.constraint.ConstraintLayout>
-
-    </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

@@ -1,10 +1,9 @@
 package com.example.maanjo.expense_mgmt.Database;
 
+/**
+ * Objektklasse zum Zwischenspeichern der ausgelesenen Datenbanktupel der Tabelle Expenses.
+ */
 public class ExpenseReader {
-
-    /**
-     * Objektklasse zum Zwischenspeichern der ausgelesenen Datenbanktupel der Tabelle Expenses.
-     */
 
     private float expense;
     private long date;

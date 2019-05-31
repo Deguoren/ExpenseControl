@@ -95,7 +95,7 @@ public class LogIn extends AppCompatActivity{
                     return;
                 }
 
-                if(dataSource.checkUserName(userString) && dataSource.checkPassword(passwordString)){
+                if(dataSource.checkUserName(userString) && dataSource.checkPassword(passwordString, userString)){
 
 
                     startActivity(new Intent(LogIn.this, StartingPage.class).putExtra("userString", userString));

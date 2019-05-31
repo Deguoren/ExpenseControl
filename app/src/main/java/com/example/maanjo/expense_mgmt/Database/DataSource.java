@@ -31,7 +31,7 @@ public class DataSource {
 
     /**
      * Konstruktor
-     * Initialisiert den DiabetesMemoDbHelper (SQLiteOpenHelper)
+     * Initialisiert den DbHelper (SQLiteOpenHelper)
      *
      * @param context: Anwendungskontext
      */
@@ -79,6 +79,8 @@ public class DataSource {
 
     /**
      * Hinzufügen einer Ausgabe in der Expenses-Tabelle
+     * Beinhaltet die auskommentierte Funktion, zu Testzwecken Daten in der Zukunft anlegen zu können
+     *
      * @param spending: Ausgabe
      * @param category: Kategorie der Ausgabe
      * @param userId: automatisch vergebene UserID
@@ -86,17 +88,16 @@ public class DataSource {
     public void createExpense(float spending, String category, int userId){
 
         ContentValues expenseEntry = new ContentValues();
-        //long date = System.currentTimeMillis();
+        long date = System.currentTimeMillis();
 
-        //Anpassen des Datums zu Testzwecken, um Daten in der Zukunft anlegen zu können
+        /*Anpassen des Datums zu Testzwecken, um Daten in der Zukunft anlegen zu können
         Calendar cal = Calendar.getInstance(); //current date and time
         cal.add(Calendar.DAY_OF_MONTH, 0); //add a day
         cal.set(Calendar.HOUR_OF_DAY, 23); //set hour to last hour
         cal.set(Calendar.MINUTE, 59); //set minutes to last minute
         cal.set(Calendar.SECOND, 59); //set seconds to last second
         cal.set(Calendar.MILLISECOND, 999); //set milliseconds to last millisecond
-        long date = cal.getTimeInMillis();
-
+        long date = cal.getTimeInMillis();*/
 
         expenseEntry.put(DbHelper.COLUMN_spending, spending*-1);
         expenseEntry.put(DbHelper.COLUMN_category, category);
@@ -154,21 +155,19 @@ public class DataSource {
         if(cursorCount > 0){
             return true;
         }
-
         return false;
     }
-
     /**
-     * Überprüfen, ob das Password in der Datenbank vorhanden ist
+     * Überprüfen, ob das Password in der Datenbank vorhanden ist und dem eingegebenen UserName zugehoerig ist
      *
      * @param password: Eingegebenes Passwort
      * @return True oder False, abhängig davon, ob der User bereits vorhanden ist
      */
-    public boolean checkPassword(String password){
+    public boolean checkPassword(String password, String name){
 
-        String[] columns = {DbHelper.COLUMN_User_Password};
-        String where = DbHelper.COLUMN_User_Password + " = ?";
-        String[] whereArgs = {password};
+        String[] columns = {DbHelper.COLUMN_User_Password, DbHelper.COLUMN_User_Name};
+        String where = DbHelper.COLUMN_User_Password + " = ?" + " AND " + DbHelper.COLUMN_User_Name + " = ?";
+        String[] whereArgs = {password, name};
 
         Cursor cursor = database.query(DbHelper.table_user,
                 columns, where, whereArgs, null,null, null);
@@ -179,7 +178,6 @@ public class DataSource {
         if(cursorCount > 0){
             return true;
         }
-
         return false;
     }
 
@@ -208,7 +206,7 @@ public class DataSource {
     }
 
     /**
-     * Ausgabe aller Einträge der Tabelle Expenses mit der übergebenen UserID
+     * Ausgabe aller Einträge der Tabelle Expenses mit der übergebenen UserID und dem aktuellen Monat als Zeitstempel
      *
      * @param userId: Übergebene UserID
      * @return Alle Tupel der Tabelle Expenses in Form einer ArrayList
@@ -250,6 +248,12 @@ public class DataSource {
         return expenseList;
     }
 
+    /**
+     * Ermittlung des Saldos des Nutzers. Einnahmen und Ausgaben des aktuellen Monats werden miteinander verrechnet
+     *
+     * @param userName
+     * @return sum - Saldo des Nutzerkontos
+     */
     public float getAccountBalance(String userName){
 
         database = dbHelper.getWritableDatabase();
@@ -316,6 +320,14 @@ public class DataSource {
         return cursor.getInt(0);
     }
 
+    /**
+     * Die Daten des Users werden aus der Datenbank ausgelesen und so formatiert, dass die Ausgaben und Einnahmen gruppiert
+     * aufsummiert werden, um eine Gegenüberstellung der Ausgaben  und Einnahmen zu ermöglichen
+     * Konfiguration und Formatierung des Datensatzes 
+     *
+     * @param userName
+     * @return PieData - Vorverarbeiteter Datensatz
+     */
     public PieData startingPieChart(String userName){
 
         ArrayList<ExpenseReader> rawData = getAllExpenses(getUserId(userName));
@@ -342,7 +354,7 @@ public class DataSource {
 
         ArrayList<Entry> yValue = new ArrayList<Entry>();
         yValue.add(new Entry(ausgabe*(-1), 0));
-        yValue.add(new Entry(einnahme,1));
+        yValue.add(new Entry(einnahme+ausgabe,1));
 
         ArrayList<String> xValue = new ArrayList<String>();
         xValue.add("Ausgabe");

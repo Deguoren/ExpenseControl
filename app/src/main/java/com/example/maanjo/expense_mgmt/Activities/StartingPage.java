@@ -26,7 +26,7 @@ import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 /**
- * StartingPage verwaltet die Funktionalitäten der Oberfläche activity_starting_page
+ * StartingPage verwaltet die Funktionalitaeten der Oberflaeche activity_starting_page
  */
 public class StartingPage extends AppCompatActivity{
 
@@ -46,9 +46,10 @@ public class StartingPage extends AppCompatActivity{
 
     /**
      * OnCreate-Methode der Klasse Registrate
-     * Referenziert die Klasse zum Layout und öffnet die Datenbankverbindung
-     * Übernimmt die Parameter aus der vorherigen Activity
-     * Setzt den Begrüßungstext
+     * Referenziert die Klasse zum Layout und oeffnet die Datenbankverbindung
+     * Uebernimmt die Parameter aus der vorherigen Activity
+     * Setzt den Begrueßungstext und den Kontenstand
+     * Die Tabellenvorschau und der PieChart werden konfiguriert
      *
      * @param savedInstanceState: Gespeicherter Zustand der Activity
      */
@@ -113,7 +114,7 @@ public class StartingPage extends AppCompatActivity{
     }
 
     /**
-     * Öffnet Verbindung zur Datenbank, wenn Activity erneut geöffnet wird
+     * Oeffnet Verbindung zur Datenbank, wenn Activity erneut geoeffnet wird und nimmt die activityuebergreifenden Werte entgegen
      */
     protected void onResume() {
 
@@ -141,9 +142,9 @@ public class StartingPage extends AppCompatActivity{
     }
 
     /**
-     * Funktionalitäten, die ausgeführt werden, wenn der Minus-Button gedrückt wird --> Ausgabe wird angelegt
+     * Funktionalitaeten, die ausgeführt werden, wenn der Ausgabe-Button gedrückt wird --> Ausgabe wird angelegt
      * Hinzufügen eines OnClick-Listeners
-     * Erzeugen eines Eintrages in der Tabelle Expenses durch aufrufen der Methode createBloodValue()
+     * Erzeugen eines Eintrages in der Tabelle Expenses durch aufrufen der Methode createExpense()
      */
     private void activateExpenseButton(){
 
@@ -181,7 +182,7 @@ public class StartingPage extends AppCompatActivity{
     }
 
     /**
-     * Funktionalitäten, die ausgeführt werden, wenn der Plus-Button gedrückt wird --> Einnahme wird angelegt
+     * Funktionalitäten, die ausgeführt werden, wenn der Einnahme-Button gedrückt wird --> Einnahme wird angelegt
      * Hinzufügen eines OnClick-Listeners
      * Erzeugen eines Eintrages in der Tabelle Expenses durch aufrufen der Methode createIncome()
      */

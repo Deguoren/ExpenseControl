@@ -26,12 +26,18 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * GraphViewer verwaltet die Funktionalitaeten der Oberflaeche activity_graph
+ */
 public class GraphViewer extends AppCompatActivity{
 
     public static final String LOG_TAG = LogIn.class.getSimpleName();
@@ -40,8 +46,15 @@ public class GraphViewer extends AppCompatActivity{
     public int userId;
     public TableHelper tableHelper;
 
-
-
+    /**
+     * OnCreate-Methode der Klasse GraphViewer
+     * Referenziert die Klasse zum Layout und oeffnet die Datenbankverbindung
+     * Uebernimmt die Parameter aus der vorherigen Activity
+     *
+     * Die Graphen werden mit den vorverarbeiteten Datensaetzen zusammengefuehrt und konfiguriert
+     *
+     * @param savedInstanceState: Gespeicherter Zustand der Activity
+     */
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -75,6 +88,9 @@ public class GraphViewer extends AppCompatActivity{
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    /**
+     * Oeffnet Verbindung zur Datenbank, wenn Activity erneut geoeffnet wird und nimmt die uebergebenen Parameter entgegen
+     */
     protected void onResume() {
 
         super.onResume();
@@ -86,6 +102,9 @@ public class GraphViewer extends AppCompatActivity{
 
     }
 
+    /**
+     * Schließt bestehende Verbindung zur Datenbank, wenn Activity pausiert wird
+     */
     protected void onPause() {
 
         super.onPause();
@@ -93,6 +112,14 @@ public class GraphViewer extends AppCompatActivity{
         dataSource.close();
     }
 
+    /**
+     * Die Daten des Users werden aus der Datenbank ausgelesen und so formatiert, dass
+     * die jeweiligen Ausgaben eines Tages zu einem Datenpunkt zusammengefasst/summiert werden
+     *
+     *
+     * @param userId
+     * @return LineData - Vorverarbeitetes Datenset für den LineGraph
+     */
     public LineData detailledLineChart(int userId){
 
         ArrayList<ExpenseReader> rawData = dataSource.getAllExpenses(userId);
@@ -158,6 +185,13 @@ public class GraphViewer extends AppCompatActivity{
         return data;
     }
 
+    /**
+     * Die Daten des Users werden aus der Datenbank ausgelesen und so formatiert, dass
+     * die jeweiligen Ausgaben und Einnahmen aufsummiert werden, um so eine Gegenueberstellung zu ermoeglichen
+     *
+     * @param userId
+     * @return BarData - Vorverarbeitetes Datenset für den BarGraph
+     */
     public BarData detailledBarChart(int userId) {
 
         ArrayList amount = new ArrayList();
@@ -217,6 +251,13 @@ public class GraphViewer extends AppCompatActivity{
         return data;
     }
 
+    /**
+     * Die Daten des Users werden aus der Datenbank ausgelesen und so formatiert, dass die Ausgaben pro Kategorie gruppiert
+     * aufsummiert werden, um eine Aufteilung der Ausgaben zu veranschaulichen
+     *
+     * @param userId
+     * @return PieData - Vorverarbeitetes Datenset für den PieChart
+     */
     public PieData detailledPieChart(int userId){
 
         ArrayList<ExpenseReader> rawData = dataSource.getAllExpenses(userId);
@@ -288,7 +329,17 @@ public class GraphViewer extends AppCompatActivity{
         set.setColors(ColorTemplate.VORDIPLOM_COLORS);
 
         PieData data = new PieData(xValue, set);
-        data.setValueFormatter(new PercentFormatter());
+
+        data.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+
+                DecimalFormat decFormat;
+                decFormat = new DecimalFormat("###,###,##0.00");
+                return decFormat.format(value) + " €";
+            }
+        });
+        data.setValueTextSize(13f);
         data.setValueTextSize(13f);
 
         return data;
