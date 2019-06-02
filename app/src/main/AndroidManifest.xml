@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/ExpenseTheme">
         <activity
             android:name=".Activities.LogIn" android:exported="true"
             android:label="@string/app_name">
@@ -22,21 +22,22 @@
             android:name=".Activities.Registrate"
             android:exported="true"
             android:label="@string/title_activity_registrate"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/ExpenseTheme">
         </activity>
         <activity
             android:name=".Activities.StartingPage" android:exported="true"
             android:label="@string/title_activity_starting_page" >
+
         </activity>
         <activity
             android:name=".Activities.TableViewer" android:exported="true"
             android:label="@string/title_activity_tableView"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/ExpenseTheme">
         </activity>
         <activity
             android:name=".Activities.GraphViewer" android:exported="true"
             android:label="@string/title_activity_graph"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/ExpenseTheme">
         </activity>
 
     </application>

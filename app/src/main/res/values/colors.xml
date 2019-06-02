@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ccffff</color>
+    <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#060606</color>
+    <color name="colorAccent">#f5b800</color>
+    <color name="colorButton">#ffffff</color>
     <color name="textColor">#000000</color>
     <color name="tableHeader">#D7D7D7</color>
+    <color name="accent_material_light">#f5b800</color>
+    <color name="background_material_light">#3b3939</color>
+    <color name="white">#fefefe</color>
+    <color name="primary_dark_material_light">#9e9c9c</color>
+    <color name="primary_material_light">#9e9e9e</color>
+    <color name="primary_material_dark2">#6f5454</color>
+    <color name="primary_material_light2">#dcdbdb</color>
+    <color name="foreground_material_light">#f1d466</color>
+    <color name="primary_text_default_material_dark">#000000</color>
+    <color name="text_white">#fdfdfd</color>
+    <color name="colorPrimary1">#6f5454</color>
+    <color name="statusBarColor">#000000</color>
+    <color name="navigationBarColor">#f1d466</color>
+    <color name="textColorPrimaryInverse">#fefdfd</color>
+    <color name="primary_text_default_material_light">#ffffff</color>
+    <color name="background_darkgrey">#3b3939</color>
+    <color name="foreground">#fcfbfb</color>
+    <color name="window_background">#fcfbfb</color>
+    <color name="text_light_primary">#ffffff</color>
+    <color name="background">#908989</color>
+    <color name="color_primary">#957171</color>
 </resources>

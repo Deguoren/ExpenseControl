@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".Activities.TableViewer">
 
     <ScrollView
@@ -20,7 +21,7 @@
             android:layout_width="fill_parent"
             android:divider="@color/material_blue_grey_800"
             android:dividerHeight="1dp"
-            app:tableView_headerColor="@color/colorPrimary"/>
+            app:tableView_headerColor="@color/foreground"/>
 
     </ScrollView>
 

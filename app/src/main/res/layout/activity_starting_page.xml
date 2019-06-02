@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/primary_dark_material_light"
     android:orientation="vertical"
     tools:context=".Activities.StartingPage">
 
@@ -46,7 +46,9 @@
                     android:id="@+id/greetings"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:textStyle="bold"
                     android:text="@string/greetings"
+                    android:textColor="@color/colorAccent"
                     android:textSize="20dp"
                     app:layout_constraintTop_toTopOf="parent"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
