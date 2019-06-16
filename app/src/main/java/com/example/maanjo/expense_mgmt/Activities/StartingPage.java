@@ -162,7 +162,14 @@ public class StartingPage extends AppCompatActivity{
            public void onClick(DialogInterface dialog, int id) {
 
                userId = dataSource.getUserId(getIntent().getStringExtra("userString"));
-               float exp = Float.parseFloat(exp_inc_value.getText().toString());
+               
+               String expStr = exp_inc_value.getText().toString();
+               if(expStr.contains(",")){
+
+                   expStr = expStr.replace(",", ".");
+               }
+               
+               float exp = Float.parseFloat(expStr);
                String category = category_spinner.getSelectedItem().toString();
 
                dataSource.createExpense(exp, category, userId);
@@ -201,7 +208,13 @@ public class StartingPage extends AppCompatActivity{
             public void onClick(DialogInterface dialog, int id) {
 
                 userId = dataSource.getUserId(getIntent().getStringExtra("userString"));
-                float inc = Float.parseFloat(income_value.getText().toString());
+                
+                String incStr = income_value.getText().toString();
+                if(incStr.contains(",")){
+
+                    incStr = incStr.replace(",", ".");
+                }
+                float inc = Float.parseFloat(incStr);
                 String category = "Einnahme";
 
                 dataSource.createIncome(inc, category, userId);
